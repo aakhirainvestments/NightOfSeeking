@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIGHT OF SEEKING — Q&A</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf6f0;
+      --text: #1a1a1a;
+      --accent: #6b1a2a;
+      --accent-light: rgba(107, 26, 42, 0.08);
+      --accent-mid: rgba(107, 26, 42, 0.2);
+      --card-bg: #ffffff;
+      --border: rgba(107, 26, 42, 0.15);
+      --muted: #999;
+      --answered-bg: rgba(107, 26, 42, 0.05);
+    }
+
+    body.male {
+      --bg: #1e3320;
+      --text: #f5f0e8;
+      --accent: #c9b99a;
+      --accent-light: rgba(201, 185, 154, 0.08);
+      --accent-mid: rgba(201, 185, 154, 0.2);
+      --card-bg: #2c4a2e;
+      --border: rgba(201, 185, 154, 0.2);
+      --muted: #8aaa8a;
+      --answered-bg: rgba(201, 185, 154, 0.05);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Montserrat, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 0 80px;
+      transition: background 0.3s;
+    }
+
+    /* ---- HEADER ---- */
+    .header {
+      padding: 50px 24px 30px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .brand {
+      font-family: Montserrat, sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .header h1 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(36px, 8vw, 56px);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .header h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .header p {
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      margin-top: 8px;
+    }
+
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: var(--accent);
+      margin: 16px auto;
+    }
+
+    /* ---- HOST TOGGLE ---- */
+    .host-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: var(--accent-mid);
+      border-radius: 24px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .toggle-slider:before {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 3px;
+      top: 3px;
+      background: var(--accent);
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    input:checked + .toggle-slider { background: var(--accent); }
+    input:checked + .toggle-slider:before {
+      transform: translateX(20px);
+      background: var(--bg);
+    }
+
+    /* ---- SUBMIT FORM ---- */
+    .submit-section {
+      max-width: 600px;
+      margin: 32px auto 0;
+      padding: 0 20px;
+    }
+
+    .submit-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 24px;
+    }
+
+    .submit-card h3 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 22px;
+      font-weight: 400;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      padding: 12px 14px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: Montserrat, sans-serif;
+      font-size: 14px;
+      outline: none;
+      border-radius: 1px;
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus { border-color: var(--accent); }
+
+    .field input::placeholder,
+    .field textarea::placeholder { color: var(--muted); }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      font-family: Montserrat, sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      border-radius: 1px;
+      margin-top: 4px;
+    }
+
+    .submit-btn:hover { opacity: 0.85; }
+    .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .submit-feedback {
+      font-size: 12px;
+      text-align: center;
+      margin-top: 10px;
+      min-height: 18px;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+
+    /* ---- QUESTIONS LIST ---- */
+    .questions-section {
+      max-width: 600px;
+      margin: 32px auto 0;
+      padding: 0 20px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--text);
+    }
+
+    .count-badge {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 40px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    /* ---- QUESTION CARD ---- */
+    .question-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 20px;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      transition: border-color 0.2s, opacity 0.3s;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .question-card.answered {
+      background: var(--answered-bg);
+      opacity: 0.6;
+    }
+
+    /* ---- VOTE SECTION ---- */
+    .vote-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      min-width: 44px;
+    }
+
+    .vote-btn {
+      width: 36px;
+      height: 36px;
+      background: var(--accent-light);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 1px;
+      transition: background 0.2s, transform 0.1s;
+      flex-shrink: 0;
+    }
+
+    .vote-btn:hover { background: var(--accent-mid); }
+    .vote-btn:active { transform: scale(0.92); }
+    .vote-btn.voted { background: var(--accent); color: var(--bg); }
+
+    .vote-count {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    /* ---- QUESTION CONTENT ---- */
+    .question-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .question-text {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 19px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .question-meta {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .answered-badge {
+      background: var(--accent);
+      color: var(--bg);
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 1px;
+    }
+
+    /* ---- HOST ACTIONS ---- */
+    .host-actions {
+      margin-top: 12px;
+      display: none;
+    }
+
+    .host-mode .host-actions { display: block; }
+
+    .mark-answered-btn {
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: Montserrat, sans-serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 1px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .mark-answered-btn:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    /* ---- REFRESH ---- */
+    .refresh-bar {
+      max-width: 600px;
+      margin: 16px auto 0;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .refresh-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: Montserrat, sans-serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 1px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .last-updated {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    /* ---- FILTER TABS ---- */
+    .filter-tabs {
+      display: flex;
+      gap: 4px;
+      max-width: 600px;
+      margin: 20px auto 0;
+      padding: 0 20px;
+    }
+
+    .filter-tab {
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: Montserrat, sans-serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 1px;
+      transition: all 0.2s;
+    }
+
+    .filter-tab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <p class="brand">Aakhira Investments</p>
+    <h1>Night of <em>Seeking</em></h1>
+    <div class="divider"></div>
+    <p>Q&A — Coffee Chat Session</p>
+
+    <div class="host-toggle">
+      <span>Attendee</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="host-toggle" onchange="toggleHostMode()">
+        <span class="toggle-slider"></span>
+      </label>
+      <span>Host View</span>
+    </div>
+  </div>
+
+  <!-- SUBMIT QUESTION -->
+  <div class="submit-section">
+    <div class="submit-card">
+      <h3>Ask a Question</h3>
+      <div class="field">
+        <label>Your Name</label>
+        <input type="text" id="submit-name" placeholder="First name" maxlength="60">
+      </div>
+      <div class="field">
+        <label>Your Question</label>
+        <textarea id="submit-question" placeholder="What would you like to ask?" rows="3" maxlength="500"></textarea>
+      </div>
+      <button class="submit-btn" id="submit-btn" onclick="submitQuestion()">Submit Question</button>
+      <p class="submit-feedback" id="submit-feedback"></p>
+    </div>
+  </div>
+
+  <!-- FILTER TABS -->
+  <div class="filter-tabs">
+    <button class="filter-tab active" id="tab-all" onclick="setFilter('all')">All</button>
+    <button class="filter-tab" id="tab-open" onclick="setFilter('open')">Unanswered</button>
+    <button class="filter-tab" id="tab-answered" onclick="setFilter('answered')">Answered</button>
+  </div>
+
+  <!-- REFRESH BAR -->
+  <div class="refresh-bar">
+    <span class="last-updated" id="last-updated">Loading...</span>
+    <button class="refresh-btn" onclick="loadQuestions()">↻ Refresh</button>
+  </div>
+
+  <!-- QUESTIONS -->
+  <div class="questions-section">
+    <div class="section-header">
+      <span class="section-title">Questions</span>
+      <span class="count-badge" id="question-count"></span>
+    </div>
+    <div id="questions-list">
+      <div class="loading">Loading questions...</div>
+    </div>
+  </div>
+
+<script>
+  // ---- CONFIG ----
+  var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbygzZSNdSrUQfzs86AyQKQHkk0FpMrcab-Aw9JrUy7OVOIPdsQYnQ90U0ra6vgWASh70A/exec";
+
+  // ---- Read gender from URL ----
+  var params = new URLSearchParams(window.location.search);
+  var GENDER = (params.get("gender") || "FEMALE").toUpperCase();
+  var isHostMode = false;
+  var currentFilter = "all";
+  var allQuestions = [];
+  var votedQuestions = JSON.parse(localStorage.getItem("voted_" + GENDER) || "[]");
+
+  // Apply theme
+  if (GENDER === "MALE") document.body.classList.add("male");
+
+  // ---- LOAD QUESTIONS ----
+  function loadQuestions() {
+    fetch(WEB_APP_URL + "?action=getQnA&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        allQuestions = data.questions || [];
+        renderQuestions();
+        document.getElementById("last-updated").innerText =
+          "Updated " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      })
+      .catch(function() {
+        document.getElementById("questions-list").innerHTML =
+          '<div class="loading">Could not load questions. Check connection.</div>';
+      });
+  }
+
+  // ---- RENDER ----
+  function renderQuestions() {
+    var list = allQuestions.filter(function(q) {
+      if (currentFilter === "open") return !q.answered;
+      if (currentFilter === "answered") return q.answered;
+      return true;
+    });
+
+    document.getElementById("question-count").innerText = list.length + " question" + (list.length !== 1 ? "s" : "");
+
+    if (list.length === 0) {
+      document.getElementById("questions-list").innerHTML =
+        '<div class="empty">No questions yet — be the first to ask 🌙</div>';
+      return;
+    }
+
+    var html = "";
+    list.forEach(function(q) {
+      var voted = votedQuestions.indexOf(q.index) !== -1;
+      var answeredBadge = q.answered ? '<span class="answered-badge">Answered</span>' : "";
+      var hostActions = isHostMode && !q.answered
+        ? '<div class="host-actions"><button class="mark-answered-btn" onclick="markAnswered(' + q.index + ')">✓ Mark as Answered</button></div>'
+        : "";
+
+      html += '<div class="question-card' + (q.answered ? " answered" : "") + '" id="qcard-' + q.index + '">'
+        + '<div class="vote-section">'
+        + '<button class="vote-btn' + (voted ? " voted" : "") + '" onclick="upvote(' + q.index + ')" title="Upvote">'
+        + (voted ? "♥" : "♡")
+        + '</button>'
+        + '<span class="vote-count" id="votes-' + q.index + '">' + q.votes + '</span>'
+        + '</div>'
+        + '<div class="question-content">'
+        + '<p class="question-text">' + escapeHtml(q.question) + '</p>'
+        + '<div class="question-meta">'
+        + '<span>— ' + escapeHtml(q.name || "Anonymous") + '</span>'
+        + answeredBadge
+        + '</div>'
+        + hostActions
+        + '</div>'
+        + '</div>';
+    });
+
+    document.getElementById("questions-list").innerHTML = html;
+  }
+
+  // ---- UPVOTE ----
+  function upvote(index) {
+    if (votedQuestions.indexOf(index) !== -1) return;
+
+    votedQuestions.push(index);
+    localStorage.setItem("voted_" + GENDER, JSON.stringify(votedQuestions));
+
+    // Optimistic update
+    var voteEl = document.getElementById("votes-" + index);
+    if (voteEl) voteEl.innerText = parseInt(voteEl.innerText) + 1;
+    var q = allQuestions.find(function(q) { return q.index === index; });
+    if (q) q.votes++;
+
+    fetch(WEB_APP_URL + "?action=upvoteQuestion&qid=" + index + "&gender=" + GENDER)
+      .catch(function() {});
+  }
+
+  // ---- MARK ANSWERED ----
+  function markAnswered(index) {
+    fetch(WEB_APP_URL + "?action=markAnswered&qid=" + index + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          var q = allQuestions.find(function(q) { return q.index === index; });
+          if (q) q.answered = true;
+          renderQuestions();
+        }
+      })
+      .catch(function() {});
+  }
+
+  // ---- SUBMIT QUESTION ----
+  function submitQuestion() {
+    var name = document.getElementById("submit-name").value.trim();
+    var question = document.getElementById("submit-question").value.trim();
+    var feedback = document.getElementById("submit-feedback");
+    var btn = document.getElementById("submit-btn");
+
+    if (!name) { feedback.innerText = "Please enter your name"; return; }
+    if (!question) { feedback.innerText = "Please enter your question"; return; }
+
+    btn.disabled = true;
+    feedback.innerText = "Submitting...";
+
+    fetch(WEB_APP_URL + "?action=submitQuestion&name=" + encodeURIComponent(name) + "&question=" + encodeURIComponent(question) + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          feedback.innerText = "Question submitted! جزاك الله خيرا 🤍";
+          document.getElementById("submit-name").value = "";
+          document.getElementById("submit-question").value = "";
+          setTimeout(function() { loadQuestions(); }, 1000);
+        } else {
+          feedback.innerText = data.error || "Something went wrong";
+        }
+        btn.disabled = false;
+      })
+      .catch(function() {
+        feedback.innerText = "Could not submit. Check your connection.";
+        btn.disabled = false;
+      });
+  }
+
+  // ---- HOST MODE ----
+  function toggleHostMode() {
+    isHostMode = document.getElementById("host-toggle").checked;
+    if (isHostMode) {
+      document.body.classList.add("host-mode");
+    } else {
+      document.body.classList.remove("host-mode");
+    }
+    renderQuestions();
+  }
+
+  // ---- FILTER ----
+  function setFilter(filter) {
+    currentFilter = filter;
+    document.querySelectorAll(".filter-tab").forEach(function(t) { t.classList.remove("active"); });
+    document.getElementById("tab-" + filter).classList.add("active");
+    renderQuestions();
+  }
+
+  // ---- UTILS ----
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  // ---- AUTO REFRESH every 60s ----
+  loadQuestions();
+  setInterval(loadQuestions, 60000);
+</script>
+
+</body>
+</html>
