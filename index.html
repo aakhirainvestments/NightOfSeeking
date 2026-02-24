@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>NIGHT OF SEEKING - Check In</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Montserrat, sans-serif;
+      font-size: 18px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 30px;
+      transition: background 0.5s;
+    }
+
+    body.male {
+      background: #2c4a2e;
+      color: #ffffff;
+    }
+
+    body.female {
+      background: #faf6f0;
+      color: #6b1a2a;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 16px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 52px;
+      font-weight: 400;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .divider {
+      width: 60px;
+      height: 1px;
+      margin: 24px auto;
+    }
+
+    body.male .divider { background: #ffffff; }
+    body.female .divider { background: #6b1a2a; }
+
+    #reader {
+      width: 100%;
+      max-width: 320px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    body.male #reader { border: 1px solid #ffffff; }
+    body.female #reader { border: 1px solid #6b1a2a; }
+
+    .manual-entry {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .manual-entry p {
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .manual-entry input {
+      width: 100%;
+      padding: 14px 20px;
+      background: transparent;
+      font-family: Montserrat, sans-serif;
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    body.male .manual-entry input { border: 1px solid #ffffff; color: #ffffff; }
+    body.male .manual-entry input::placeholder { color: #a8c8a8; }
+    body.female .manual-entry input { border: 1px solid #6b1a2a; color: #6b1a2a; }
+    body.female .manual-entry input::placeholder { color: #c4a0a8; }
+
+    button {
+      margin-top: 20px;
+      background: transparent;
+      padding: 16px 48px;
+      font-family: Montserrat, sans-serif;
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    body.male button { color: #ffffff; border: 1px solid #ffffff; }
+    body.female button { color: #6b1a2a; border: 1px solid #6b1a2a; }
+
+    #result {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+      width: 100%;
+    }
+
+    #result .icon { font-size: 80px; margin-bottom: 24px; }
+
+    #result h2 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 52px;
+      font-weight: 400;
+      margin-bottom: 20px;
+    }
+
+    #result p { font-size: 18px; line-height: 2; font-weight: 300; }
+    #result strong { font-weight: 600; font-size: 22px; }
+  </style>
+</head>
+<body>
+
+<div id="scanner-view" style="display:flex;flex-direction:column;align-items:center;width:100%;">
+  <p class="brand">Aakhira Investments</p>
+  <h1 id="page-title">Check In</h1>
+  <div class="divider"></div>
+  <div id="reader"></div>
+  <button onclick="startScanner()">📷 START SCANNER</button>
+  <div class="manual-entry">
+    <p>— or enter ticket ID manually —</p>
+    <input type="text" id="manual-id" placeholder="e.g. 8E320756" />
+    <button onclick="submitManual()">SUBMIT</button>
+  </div>
+</div>
+
+<div id="result">
+  <div class="icon" id="result-icon"></div>
+  <h2 id="result-heading"></h2>
+  <div class="divider"></div>
+  <p id="result-details"></p>
+  <button onclick="resetScanner()">SCAN ANOTHER</button>
+</div>
+
+<script>
+  // ---- CONFIG ----
+  var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbygzZSNdSrUQfzs86AyQKQHkk0FpMrcab-Aw9JrUy7OVOIPdsQYnQ90U0ra6vgWASh70A/exec";
+
+  // ---- Read gender from URL ----
+  var params = new URLSearchParams(window.location.search);
+  var GENDER = (params.get("gender") || "MALE").toUpperCase();
+
+  // ---- Apply theme ----
+  document.body.classList.add(GENDER === "FEMALE" ? "female" : "male");
+  document.getElementById("page-title").innerText = GENDER === "FEMALE" ? "Sisters Itikaaf" : "Brothers Itikaaf";
+
+  var scanner;
+
+  function startScanner() {
+    document.getElementById("reader").innerHTML = "";
+    scanner = new Html5Qrcode("reader");
+    scanner.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: { width: 250, height: 250 } },
+      function(decodedText) { scanner.stop(); checkIn(decodedText); },
+      function(err) {}
+    );
+  }
+
+  function submitManual() {
+    var raw = document.getElementById("manual-id").value.trim();
+    if (!raw) { alert("Please enter a Ticket ID"); return; }
+    checkIn(raw);
+  }
+
+  function checkIn(id) {
+    fetch(WEB_APP_URL + "?id=" + encodeURIComponent(id) + "&gender=" + GENDER)
+      .then(function(response) { return response.json(); })
+      .then(function(result) { showResult(result); })
+      .catch(function() { showResult({ status: "invalid" }); });
+  }
+
+  function showResult(result) {
+    document.getElementById("scanner-view").style.display = "none";
+    document.getElementById("result").style.display = "block";
+
+    if (result.status === "success") {
+      document.body.style.background = GENDER === "FEMALE" ? "#e8f5e9" : "#1a3a1c";
+      document.getElementById("result-icon").innerText = "✅";
+      document.getElementById("result-heading").innerText = "Welcome In";
+      document.getElementById("result-details").innerHTML = "<strong>" + result.name + "</strong>";
+    } else if (result.status === "already") {
+      document.body.style.background = GENDER === "FEMALE" ? "#fff8e1" : "#5a3a0a";
+      document.getElementById("result-icon").innerText = "⚠️";
+      document.getElementById("result-heading").innerText = "Already Checked In";
+      document.getElementById("result-details").innerHTML = "<strong>" + result.name + "</strong><br/><br/>This ticket has already been used.";
+    } else {
+      document.body.style.background = GENDER === "FEMALE" ? "#fce4ec" : "#3a0f0f";
+      document.getElementById("result-icon").innerText = "❌";
+      document.getElementById("result-heading").innerText = "Invalid Ticket";
+      document.getElementById("result-details").innerText = "QR code not recognised. Please check with the organiser.";
+    }
+  }
+
+  function resetScanner() {
+    document.getElementById("result").style.display = "none";
+    document.getElementById("scanner-view").style.display = "flex";
+    document.body.style.background = GENDER === "FEMALE" ? "#faf6f0" : "#2c4a2e";
+    document.getElementById("manual-id").value = "";
+  }
+</script>
+
+</body>
+</html>
