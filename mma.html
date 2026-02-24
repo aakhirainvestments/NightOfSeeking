@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIGHT OF SEEKING — MMA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf6f0;
+      --text: #1a1a1a;
+      --accent: #6b1a2a;
+      --accent-light: rgba(107, 26, 42, 0.08);
+      --accent-mid: rgba(107, 26, 42, 0.2);
+      --card-bg: #ffffff;
+      --border: rgba(107, 26, 42, 0.15);
+      --muted: #999;
+      --checked-bg: rgba(107, 26, 42, 0.05);
+    }
+
+    body.male {
+      --bg: #1e3320;
+      --text: #f5f0e8;
+      --accent: #c9b99a;
+      --accent-light: rgba(201, 185, 154, 0.08);
+      --accent-mid: rgba(201, 185, 154, 0.2);
+      --card-bg: #2c4a2e;
+      --border: rgba(201, 185, 154, 0.2);
+      --muted: #8aaa8a;
+      --checked-bg: rgba(201, 185, 154, 0.05);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Montserrat, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 0 80px;
+    }
+
+    .header {
+      padding: 50px 24px 30px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .header h1 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(36px, 8vw, 56px);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .header h1 em { font-style: italic; color: var(--accent); }
+
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: var(--accent);
+      margin: 16px auto;
+    }
+
+    .header p {
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .stats-bar {
+      max-width: 600px;
+      margin: 24px auto 0;
+      padding: 0 20px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .stat {
+      flex: 1;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 14px;
+      text-align: center;
+      border-radius: 2px;
+    }
+
+    .stat-number {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .refresh-bar {
+      max-width: 600px;
+      margin: 16px auto 0;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .refresh-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: Montserrat, sans-serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 1px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .last-updated {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .list-section {
+      max-width: 600px;
+      margin: 24px auto 0;
+      padding: 0 20px;
+    }
+
+    .list-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .list-header {
+      padding: 14px 16px;
+      background: var(--accent);
+      color: var(--bg);
+      font-family: "Cormorant Garamond", serif;
+      font-size: 20px;
+      font-weight: 400;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .list-progress {
+      font-size: 11px;
+      letter-spacing: 2px;
+      opacity: 0.8;
+      font-family: Montserrat, sans-serif;
+    }
+
+    .attendee-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+
+    .attendee-row:last-child { border-bottom: none; }
+    .attendee-row:hover { background: var(--accent-light); }
+    .attendee-row.checked { background: var(--checked-bg); }
+
+    .attendee-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .attendee-name {
+      font-size: 15px;
+      color: var(--text);
+      transition: opacity 0.2s;
+    }
+
+    .attendee-number {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .attendee-row.checked .attendee-name {
+      opacity: 0.4;
+      text-decoration: line-through;
+    }
+
+    .check-box {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border);
+      border-radius: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .attendee-row.checked .check-box {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg);
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 40px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <p class="brand">Aakhira Investments</p>
+    <h1>🥊 <em>MMA & Self Defence</em></h1>
+    <div class="divider"></div>
+    <p>Activity Manager — Night of Seeking</p>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-number" id="stat-total">—</div>
+      <div class="stat-label">Registered</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number" id="stat-checked">—</div>
+      <div class="stat-label">Checked Off</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number" id="stat-remaining">—</div>
+      <div class="stat-label">Remaining</div>
+    </div>
+  </div>
+
+  <div class="refresh-bar">
+    <span class="last-updated" id="last-updated">Loading...</span>
+    <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+  </div>
+
+  <div class="list-section" id="list-container">
+    <div class="loading">Loading participants...</div>
+  </div>
+
+<script>
+  var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbygzZSNdSrUQfzs86AyQKQHkk0FpMrcab-Aw9JrUy7OVOIPdsQYnQ90U0ra6vgWASh70A/exec";
+
+  var params = new URLSearchParams(window.location.search);
+  var GENDER = (params.get("gender") || "MALE").toUpperCase();
+  if (GENDER === "MALE") document.body.classList.add("male");
+
+  var listData = [];
+
+  function loadData() {
+    fetch(WEB_APP_URL + "?action=getMMAList&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        listData = data.list || [];
+        renderList();
+        document.getElementById("last-updated").innerText =
+          "Updated " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      })
+      .catch(function() {
+        document.getElementById("list-container").innerHTML =
+          '<div class="loading">Could not load data. Check connection.</div>';
+      });
+  }
+
+  function renderList() {
+    var container = document.getElementById("list-container");
+    var checkedCount = listData.filter(function(m) { return m.checkedOff; }).length;
+
+    updateStats(listData.length, checkedCount);
+
+    if (listData.length === 0) {
+      container.innerHTML = '<div class="empty">No MMA sign-ups yet 🥊</div>';
+      return;
+    }
+
+    var html = '<div class="list-card">'
+      + '<div class="list-header">'
+      + '<span>Participants</span>'
+      + '<span class="list-progress">' + checkedCount + ' / ' + listData.length + '</span>'
+      + '</div>';
+
+    listData.forEach(function(m, i) {
+      html += '<div class="attendee-row' + (m.checkedOff ? " checked" : "") + '" '
+        + 'id="row-' + m.id + '" '
+        + 'onclick="toggleCheck(\'' + m.id + '\')">'
+        + '<div class="attendee-info">'
+        + '<span class="attendee-name">' + escapeHtml(m.firstName + " " + m.surname) + '</span>'
+        + '<span class="attendee-number">#' + (i + 1) + '</span>'
+        + '</div>'
+        + '<span class="check-box">' + (m.checkedOff ? "✓" : "") + '</span>'
+        + '</div>';
+    });
+
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
+  function updateStats(total, checked) {
+    document.getElementById("stat-total").innerText = total;
+    document.getElementById("stat-checked").innerText = checked;
+    document.getElementById("stat-remaining").innerText = total - checked;
+  }
+
+  function toggleCheck(uid) {
+    var row = document.getElementById("row-" + uid);
+    var isChecked = row.classList.contains("checked");
+
+    row.classList.toggle("checked");
+    row.querySelector(".check-box").innerText = isChecked ? "" : "✓";
+
+    var member = listData.find(function(m) { return m.id === uid; });
+    if (member) member.checkedOff = !isChecked;
+
+    var checked = listData.filter(function(m) { return m.checkedOff; }).length;
+    updateStats(listData.length, checked);
+
+    // Update list header progress
+    var header = document.querySelector(".list-progress");
+    if (header) header.innerText = checked + " / " + listData.length;
+
+    fetch(WEB_APP_URL + "?action=checkOffAttendee&uid=" + encodeURIComponent(uid) + "&activity=mma&gender=" + GENDER)
+      .catch(function() {});
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  loadData();
+  setInterval(loadData, 60000);
+</script>
+
+</body>
+</html>
