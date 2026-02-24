@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIGHT OF SEEKING — Volunteer Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1a10;
+      --bg2: #162018;
+      --text: #f0ebe0;
+      --accent: #c9b99a;
+      --accent2: #8fbe8f;
+      --border: rgba(201, 185, 154, 0.2);
+      --card: #1a2a1c;
+      --muted: #6a8a6a;
+      --danger: #c0392b;
+      --success: #27ae60;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Montserrat, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    /* HEADER */
+    .header {
+      padding: 50px 24px 32px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .brand { font-size: 11px; font-weight: 500; letter-spacing: 5px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .header h1 { font-family: "Cormorant Garamond", serif; font-size: clamp(36px, 8vw, 56px); font-weight: 300; color: var(--text); }
+    .header h1 em { font-style: italic; color: var(--accent); }
+    .divider { width: 40px; height: 1px; background: var(--accent); margin: 16px auto; }
+    .header p { font-size: 13px; color: var(--muted); letter-spacing: 1px; }
+
+    /* QUICK LINKS */
+    .quick-links {
+      max-width: 640px;
+      margin: 24px auto 0;
+      padding: 0 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .quick-link {
+      flex: 1;
+      min-width: 140px;
+      padding: 14px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: border-color 0.2s, background 0.2s;
+      cursor: pointer;
+    }
+
+    .quick-link:hover { border-color: var(--accent); background: rgba(201, 185, 154, 0.05); }
+    .quick-link .ql-icon { font-size: 20px; display: block; margin-bottom: 6px; }
+
+    /* SECTIONS */
+    .section { max-width: 640px; margin: 32px auto 0; padding: 0 20px; }
+
+    .section-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 26px;
+      font-weight: 300;
+      color: var(--text);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* SIGNUP CARD */
+    .signup-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 24px;
+    }
+
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+    .field input { width: 100%; padding: 12px 14px; background: transparent; border: 1px solid var(--border); color: var(--text); font-family: Montserrat, sans-serif; font-size: 14px; outline: none; border-radius: 1px; transition: border-color 0.2s; }
+    .field input:focus { border-color: var(--accent); }
+    .field input::placeholder { color: var(--muted); }
+
+    .btn-primary { width: 100%; padding: 14px; background: var(--accent); color: var(--bg); border: none; font-family: Montserrat, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; border-radius: 1px; transition: opacity 0.2s; margin-top: 4px; }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn-secondary { width: 100%; padding: 12px; background: transparent; color: var(--muted); border: 1px solid var(--border); font-family: Montserrat, sans-serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; border-radius: 1px; margin-top: 8px; transition: border-color 0.2s, color 0.2s; }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    .feedback { font-size: 12px; text-align: center; margin-top: 10px; min-height: 18px; color: var(--accent); letter-spacing: 1px; }
+
+    /* VOLUNTEER BADGE */
+    .vol-badge {
+      background: var(--card);
+      border: 1px solid var(--accent);
+      border-radius: 2px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .vol-badge-name { font-family: "Cormorant Garamond", serif; font-size: 22px; }
+    .vol-badge-id { font-size: 11px; color: var(--muted); letter-spacing: 2px; }
+
+    /* FILTER */
+    .filter-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn { padding: 8px 16px; background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: Montserrat, sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-radius: 1px; transition: all 0.2s; }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+
+    /* BLOCKS */
+    .block { margin-bottom: 24px; }
+
+    .block-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: rgba(201, 185, 154, 0.08);
+      border: 1px solid var(--border);
+      border-radius: 2px 2px 0 0;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .block-time { font-size: 12px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; min-width: 60px; }
+    .block-name { font-family: "Cormorant Garamond", serif; font-size: 20px; font-weight: 300; flex: 1; }
+    .block-count { font-size: 11px; color: var(--muted); letter-spacing: 1px; }
+    .block-chevron { font-size: 12px; color: var(--muted); transition: transform 0.2s; }
+    .block.collapsed .block-chevron { transform: rotate(-90deg); }
+
+    .block-tasks {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 2px 2px;
+      overflow: hidden;
+    }
+
+    .block.collapsed .block-tasks { display: none; }
+
+    /* TASK ROW */
+    .task-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+
+    .task-row:last-child { border-bottom: none; }
+    .task-row.completed { opacity: 0.5; }
+    .task-row.mine { background: rgba(201, 185, 154, 0.06); border-left: 2px solid var(--accent); }
+
+    .task-check {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border);
+      border-radius: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.2s, border-color 0.2s;
+      font-size: 14px;
+    }
+
+    .task-row.completed .task-check { background: var(--success); border-color: var(--success); }
+
+    .task-info { flex: 1; min-width: 0; }
+    .task-name { font-size: 15px; color: var(--text); }
+    .task-row.completed .task-name { text-decoration: line-through; }
+    .task-claimer { font-size: 11px; color: var(--muted); margin-top: 3px; letter-spacing: 1px; }
+    .task-claimer.is-me { color: var(--accent); }
+
+    .task-claim-btn {
+      padding: 6px 14px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: Montserrat, sans-serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 1px;
+      white-space: nowrap;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .task-claim-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .task-claim-btn.unclaim { border-color: var(--danger); color: var(--danger); }
+    .task-claim-btn.unclaim:hover { background: var(--danger); color: white; }
+
+    /* ADD TASK FORM */
+    .add-block-form {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .add-block-form h4 { font-family: "Cormorant Garamond", serif; font-size: 20px; font-weight: 300; margin-bottom: 14px; color: var(--text); }
+
+    .inline-fields { display: flex; gap: 10px; }
+    .inline-fields .field { flex: 1; margin-bottom: 0; }
+
+    .btn-small { padding: 10px 20px; background: var(--accent); color: var(--bg); border: none; font-family: Montserrat, sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-radius: 1px; margin-top: 10px; }
+
+    /* ADMIN SECTION */
+    .admin-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .admin-btn { flex: 1; min-width: 140px; padding: 12px; background: transparent; border: 1px solid var(--border); color: var(--text); font-family: Montserrat, sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-radius: 1px; text-align: center; transition: border-color 0.2s; }
+    .admin-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* VOLUNTEER LIST */
+    .vol-list { background: var(--card); border: 1px solid var(--border); border-radius: 2px; overflow: hidden; }
+    .vol-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+    .vol-row:last-child { border-bottom: none; }
+    .vol-row-name { font-size: 14px; }
+    .vol-row-email { font-size: 11px; color: var(--muted); }
+    .vol-email-btn { padding: 6px 12px; background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: Montserrat, sans-serif; font-size: 10px; letter-spacing: 1px; cursor: pointer; border-radius: 1px; transition: all 0.2s; flex-shrink: 0; }
+    .vol-email-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .refresh-bar { max-width: 640px; margin: 16px auto 0; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; }
+    .refresh-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: Montserrat, sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; padding: 8px 16px; cursor: pointer; border-radius: 1px; transition: border-color 0.2s, color 0.2s; }
+    .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .last-updated { font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+
+    .loading { text-align: center; padding: 40px; font-size: 13px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+    .empty { text-align: center; padding: 30px; font-family: "Cormorant Garamond", serif; font-size: 20px; font-style: italic; color: var(--muted); }
+
+    .tabs { display: flex; gap: 0; max-width: 640px; margin: 24px auto 0; padding: 0 20px; }
+    .tab { flex: 1; padding: 12px; text-align: center; background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: Montserrat, sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+    .tab:first-child { border-radius: 2px 0 0 2px; }
+    .tab:last-child { border-radius: 0 2px 2px 0; border-left: none; }
+    .tab.active { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ADD TASK to existing block */
+    .add-task-row {
+      padding: 10px 16px;
+      border-top: 1px dashed var(--border);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .add-task-row input {
+      flex: 1;
+      padding: 8px 12px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: Montserrat, sans-serif;
+      font-size: 13px;
+      outline: none;
+      border-radius: 1px;
+    }
+
+    .add-task-row input::placeholder { color: var(--muted); }
+    .add-task-row input:focus { border-color: var(--accent); }
+
+    .add-task-row button {
+      padding: 8px 14px;
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      font-family: Montserrat, sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 1px;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <p class="brand">Aakhira Investments</p>
+    <h1>Volunteer <em>Hub</em></h1>
+    <div class="divider"></div>
+    <p id="event-title">Night of Seeking</p>
+  </div>
+
+  <!-- QUICK LINKS -->
+  <div class="quick-links">
+    <a class="quick-link" id="scanner-link" href="#" target="_blank">
+      <span class="ql-icon">📷</span>QR Scanner
+    </a>
+    <a class="quick-link" id="khatam-link" href="#" target="_blank">
+      <span class="ql-icon">📖</span>Khatam
+    </a>
+    <a class="quick-link" id="qna-link" href="#" target="_blank">
+      <span class="ql-icon">❓</span>Q&A
+    </a>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('schedule')">Schedule & Tasks</button>
+    <button class="tab" onclick="switchTab('signup')">Sign Up</button>
+    <button class="tab" onclick="switchTab('admin')">Admin</button>
+  </div>
+
+  <!-- SCHEDULE TAB -->
+  <div class="tab-content active" id="tab-schedule">
+
+    <div class="refresh-bar">
+      <span class="last-updated" id="last-updated">Loading...</span>
+      <button class="refresh-btn" onclick="loadTasks()">↻ Refresh</button>
+    </div>
+
+    <div class="section" style="margin-top:16px;">
+      <div class="filter-bar">
+        <button class="filter-btn active" id="filter-all" onclick="setFilter('all')">All Tasks</button>
+        <button class="filter-btn" id="filter-mine" onclick="setFilter('mine')">My Tasks</button>
+        <button class="filter-btn" id="filter-open" onclick="setFilter('open')">Unclaimed</button>
+      </div>
+      <div id="schedule-container">
+        <div class="loading">Loading schedule...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGNUP TAB -->
+  <div class="tab-content" id="tab-signup">
+    <div class="section">
+      <div id="signup-view">
+        <div class="signup-card">
+          <p class="section-title" style="font-size:22px;margin-bottom:16px;">Join as a Volunteer</p>
+          <div class="field">
+            <label>Full Name</label>
+            <input type="text" id="vol-name" placeholder="Your name">
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" id="vol-email" placeholder="your@email.com">
+          </div>
+          <div class="field">
+            <label>Phone (optional)</label>
+            <input type="tel" id="vol-phone" placeholder="e.g. 082 123 4567">
+          </div>
+          <button class="btn-primary" id="signup-btn" onclick="signUp()">Sign Up as Volunteer</button>
+          <p class="feedback" id="signup-feedback"></p>
+        </div>
+      </div>
+
+      <div id="volunteer-view" style="display:none;">
+        <div class="vol-badge">
+          <div>
+            <p class="vol-badge-name" id="vol-display-name">—</p>
+            <p class="vol-badge-id" id="vol-display-id">ID: —</p>
+          </div>
+          <button class="btn-secondary" style="width:auto;margin:0;" onclick="emailMyTasks()">📧 Email My Tasks</button>
+        </div>
+        <p class="feedback" id="email-feedback" style="margin-top:10px;"></p>
+        <button class="btn-secondary" style="margin-top:16px;" onclick="switchTab('schedule');setFilter('mine')">View My Tasks →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN TAB -->
+  <div class="tab-content" id="tab-admin">
+    <div class="section">
+
+      <p class="section-title">Add Time Block + Task</p>
+      <div class="add-block-form">
+        <h4>New Block</h4>
+        <div class="inline-fields">
+          <div class="field">
+            <label>Time</label>
+            <input type="text" id="new-block-time" placeholder="e.g. 22:00">
+          </div>
+          <div class="field">
+            <label>Block Name</label>
+            <input type="text" id="new-block-name" placeholder="e.g. Setup">
+          </div>
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label>First Task</label>
+          <input type="text" id="new-task-name" placeholder="e.g. Set up archery range">
+        </div>
+        <button class="btn-small" onclick="addNewBlock()">+ Add Block & Task</button>
+        <p class="feedback" id="add-feedback"></p>
+      </div>
+
+      <p class="section-title" style="margin-bottom:12px;">Volunteers</p>
+      <div class="admin-actions">
+        <button class="admin-btn" onclick="emailAll()">📧 Email All Volunteers Their Tasks</button>
+      </div>
+      <div id="vol-list-container">
+        <div class="loading">Loading volunteers...</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbygzZSNdSrUQfzs86AyQKQHkk0FpMrcab-Aw9JrUy7OVOIPdsQYnQ90U0ra6vgWASh70A/exec";
+
+  var params = new URLSearchParams(window.location.search);
+  var GENDER = (params.get("gender") || "FEMALE").toUpperCase();
+
+  // Set links
+  var base = "https://aakhirainvestments.github.io/NightOfSeeking/";
+  var g = "?gender=" + GENDER;
+  document.getElementById("scanner-link").href = base + "index.html" + g;
+  document.getElementById("khatam-link").href = base + "khatam.html" + g;
+  document.getElementById("qna-link").href = base + "qna.html" + g;
+  document.getElementById("event-title").innerText = GENDER === "MALE" ? "Brothers Itikaaf — Volunteer Hub" : "Sisters Itikaaf — Volunteer Hub";
+
+  // Volunteer state
+  var ME = JSON.parse(localStorage.getItem("vol_" + GENDER) || "null");
+  var blocksData = [];
+  var volunteersData = [];
+  var currentFilter = "all";
+
+  // Restore volunteer state
+  if (ME) {
+    showVolunteerView();
+  }
+
+  // ---- TABS ----
+  function switchTab(tab) {
+    document.querySelectorAll(".tab").forEach(function(t, i) {
+      t.classList.remove("active");
+    });
+    document.querySelectorAll(".tab-content").forEach(function(t) { t.classList.remove("active"); });
+    var tabs = ["schedule", "signup", "admin"];
+    tabs.forEach(function(name, i) {
+      if (name === tab) {
+        document.querySelectorAll(".tab")[i].classList.add("active");
+        document.getElementById("tab-" + name).classList.add("active");
+      }
+    });
+    if (tab === "admin") { loadVolunteers(); }
+  }
+
+  // ---- SIGN UP ----
+  function signUp() {
+    var name = document.getElementById("vol-name").value.trim();
+    var email = document.getElementById("vol-email").value.trim();
+    var phone = document.getElementById("vol-phone").value.trim();
+    var feedback = document.getElementById("signup-feedback");
+    var btn = document.getElementById("signup-btn");
+
+    if (!name) { feedback.innerText = "Please enter your name"; return; }
+    if (!email) { feedback.innerText = "Please enter your email"; return; }
+
+    btn.disabled = true;
+    feedback.innerText = "Signing up...";
+
+    fetch(WEB_APP_URL + "?action=signUpVolunteer&name=" + encodeURIComponent(name) + "&email=" + encodeURIComponent(email) + "&phone=" + encodeURIComponent(phone) + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success || data.existing) {
+          ME = { id: data.id, name: data.name || name };
+          localStorage.setItem("vol_" + GENDER, JSON.stringify(ME));
+          feedback.innerText = data.existing ? "Welcome back, " + ME.name + "!" : "You're signed up! Check your email for your links. 🌙";
+          setTimeout(showVolunteerView, 800);
+        } else {
+          feedback.innerText = data.error || "Something went wrong";
+          btn.disabled = false;
+        }
+      })
+      .catch(function() { feedback.innerText = "Could not sign up. Check connection."; btn.disabled = false; });
+  }
+
+  function showVolunteerView() {
+    if (!ME) return;
+    document.getElementById("signup-view").style.display = "none";
+    document.getElementById("volunteer-view").style.display = "block";
+    document.getElementById("vol-display-name").innerText = ME.name;
+    document.getElementById("vol-display-id").innerText = "ID: " + ME.id;
+  }
+
+  function emailMyTasks() {
+    if (!ME) return;
+    var feedback = document.getElementById("email-feedback");
+    feedback.innerText = "Sending...";
+    fetch(WEB_APP_URL + "?action=emailVolunteer&vid=" + ME.id + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        feedback.innerText = data.success ? "Sent to your email! جزاك الله خيرا 🤍" : (data.error || "Something went wrong");
+      })
+      .catch(function() { feedback.innerText = "Could not send. Check connection."; });
+  }
+
+  // ---- LOAD TASKS ----
+  function loadTasks() {
+    fetch(WEB_APP_URL + "?action=getTasks&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        blocksData = data.blocks || [];
+        renderSchedule();
+        document.getElementById("last-updated").innerText =
+          "Updated " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      })
+      .catch(function() {
+        document.getElementById("schedule-container").innerHTML = '<div class="loading">Could not load. Check connection.</div>';
+      });
+  }
+
+  function setFilter(f) {
+    currentFilter = f;
+    document.querySelectorAll(".filter-btn").forEach(function(b) { b.classList.remove("active"); });
+    document.getElementById("filter-" + f).classList.add("active");
+    renderSchedule();
+  }
+
+  function renderSchedule() {
+    var container = document.getElementById("schedule-container");
+
+    var filtered = blocksData.map(function(block) {
+      var tasks = block.tasks.filter(function(t) {
+        if (currentFilter === "mine") return ME && (t.claimedById === ME.id || t.claimedByName === ME.name);
+        if (currentFilter === "open") return !t.claimedByName;
+        return true;
+      });
+      return { blockName: block.blockName, blockTime: block.blockTime, tasks: tasks };
+    }).filter(function(b) { return b.tasks.length > 0; });
+
+    if (filtered.length === 0) {
+      container.innerHTML = currentFilter === "mine"
+        ? '<div class="empty">No tasks claimed yet — browse All Tasks to claim some 🌙</div>'
+        : '<div class="empty">No tasks yet</div>';
+      return;
+    }
+
+    var html = "";
+    filtered.forEach(function(block, bi) {
+      var done = block.tasks.filter(function(t) { return t.completed; }).length;
+      html += '<div class="block" id="block-' + bi + '">'
+        + '<div class="block-header" onclick="toggleBlock(' + bi + ')">'
+        + '<span class="block-time">' + block.blockTime + '</span>'
+        + '<span class="block-name">' + block.blockName + '</span>'
+        + '<span class="block-count">' + done + '/' + block.tasks.length + '</span>'
+        + '<span class="block-chevron">▾</span>'
+        + '</div>'
+        + '<div class="block-tasks">';
+
+      block.tasks.forEach(function(t) {
+        var isMine = ME && (t.claimedById === ME.id || t.claimedByName === ME.name);
+        var rowCls = "task-row" + (t.completed ? " completed" : "") + (isMine ? " mine" : "");
+        var claimerText = t.claimedByName
+          ? (isMine ? "You" : t.claimedByName)
+          : "Unclaimed";
+        var claimerCls = "task-claimer" + (isMine ? " is-me" : "");
+
+        var actionBtn = "";
+        if (!t.claimedByName) {
+          actionBtn = '<button class="task-claim-btn" onclick="claimTask(\'' + t.id + '\')">Claim</button>';
+        } else if (isMine) {
+          actionBtn = '<button class="task-claim-btn unclaim" onclick="unclaimTask(\'' + t.id + '\')">Unclaim</button>';
+        }
+
+        html += '<div class="' + rowCls + '" id="task-' + t.id + '">'
+          + '<div class="task-check" onclick="toggleComplete(\'' + t.id + '\')">' + (t.completed ? "✓" : "") + '</div>'
+          + '<div class="task-info">'
+          + '<p class="task-name">' + escapeHtml(t.taskName) + '</p>'
+          + '<p class="' + claimerCls + '">' + escapeHtml(claimerText) + '</p>'
+          + '</div>'
+          + actionBtn
+          + '</div>';
+      });
+
+      // Add task input row (always visible)
+      html += '<div class="add-task-row">'
+        + '<input type="text" placeholder="+ Add task to this block..." id="newtask-' + bi + '" onkeydown="if(event.key===\'Enter\') addTaskToBlock(\'' + escapeHtml(block.blockName) + '\',\'' + escapeHtml(block.blockTime) + '\',' + bi + ')">'
+        + '<button onclick="addTaskToBlock(\'' + escapeHtml(block.blockName) + '\',\'' + escapeHtml(block.blockTime) + '\',' + bi + '\')">Add</button>'
+        + '</div>';
+
+      html += '</div></div>';
+    });
+
+    container.innerHTML = html;
+  }
+
+  function toggleBlock(bi) {
+    var block = document.getElementById("block-" + bi);
+    block.classList.toggle("collapsed");
+  }
+
+  // ---- CLAIM / UNCLAIM / COMPLETE ----
+  function claimTask(taskId) {
+    if (!ME) {
+      alert("Please sign up as a volunteer first!");
+      switchTab("signup");
+      return;
+    }
+    fetch(WEB_APP_URL + "?action=claimTask&taskId=" + taskId + "&name=" + encodeURIComponent(ME.name) + "&vid=" + ME.id + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) loadTasks();
+        else alert(data.error || "Could not claim task");
+      });
+  }
+
+  function unclaimTask(taskId) {
+    fetch(WEB_APP_URL + "?action=unclaimTask&taskId=" + taskId + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) { if (data.success) loadTasks(); });
+  }
+
+  function toggleComplete(taskId) {
+    fetch(WEB_APP_URL + "?action=completeTask&taskId=" + taskId + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) { if (data.success) loadTasks(); });
+  }
+
+  // ---- ADD BLOCK + TASK ----
+  function addNewBlock() {
+    var time = document.getElementById("new-block-time").value.trim();
+    var name = document.getElementById("new-block-name").value.trim();
+    var task = document.getElementById("new-task-name").value.trim();
+    var feedback = document.getElementById("add-feedback");
+
+    if (!time || !name || !task) { feedback.innerText = "Please fill in all fields"; return; }
+    feedback.innerText = "Adding...";
+
+    fetch(WEB_APP_URL + "?action=addTask&blockName=" + encodeURIComponent(name) + "&blockTime=" + encodeURIComponent(time) + "&taskName=" + encodeURIComponent(task) + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          feedback.innerText = "Block added!";
+          document.getElementById("new-block-time").value = "";
+          document.getElementById("new-block-name").value = "";
+          document.getElementById("new-task-name").value = "";
+          loadTasks();
+          setTimeout(function() { switchTab("schedule"); }, 800);
+        } else {
+          feedback.innerText = data.error || "Something went wrong";
+        }
+      });
+  }
+
+  function addTaskToBlock(blockName, blockTime, bi) {
+    var input = document.getElementById("newtask-" + bi);
+    var taskName = input.value.trim();
+    if (!taskName) return;
+
+    fetch(WEB_APP_URL + "?action=addTask&blockName=" + encodeURIComponent(blockName) + "&blockTime=" + encodeURIComponent(blockTime) + "&taskName=" + encodeURIComponent(taskName) + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) { input.value = ""; loadTasks(); }
+      });
+  }
+
+  // ---- ADMIN ----
+  function loadVolunteers() {
+    fetch(WEB_APP_URL + "?action=getVolunteers&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        volunteersData = data.volunteers || [];
+        renderVolunteers();
+      });
+  }
+
+  function renderVolunteers() {
+    var container = document.getElementById("vol-list-container");
+    if (volunteersData.length === 0) {
+      container.innerHTML = '<div class="empty">No volunteers yet</div>';
+      return;
+    }
+    var html = '<div class="vol-list">';
+    volunteersData.forEach(function(v) {
+      html += '<div class="vol-row">'
+        + '<div><p class="vol-row-name">' + escapeHtml(v.name) + '</p><p class="vol-row-email">' + escapeHtml(v.email) + '</p></div>'
+        + '<button class="vol-email-btn" onclick="emailOne(\'' + v.id + '\')">📧 Email Tasks</button>'
+        + '</div>';
+    });
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
+  function emailOne(vid) {
+    fetch(WEB_APP_URL + "?action=emailVolunteer&vid=" + vid + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) { alert(data.success ? "Email sent!" : (data.error || "Something went wrong")); });
+  }
+
+  function emailAll() {
+    if (!confirm("Send task list emails to all volunteers?")) return;
+    fetch(WEB_APP_URL + "?action=emailAllVolunteers&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) { alert(data.success ? "Emails sent to " + data.count + " volunteers!" : "Something went wrong"); });
+  }
+
+  function escapeHtml(str) {
+    return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+  }
+
+  // ---- INIT ----
+  loadTasks();
+  setInterval(loadTasks, 60000);
+</script>
+</body>
+</html>
