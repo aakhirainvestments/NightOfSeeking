@@ -242,8 +242,8 @@
       } else if (j.status === "Full") {
         cls += " full"; statusText = "Full";
       } else if (j.status === "Half") {
-        cls += " half"; statusText = "Half free";
-      }
+  cls += " half"; statusText = "2nd half free";
+}
 
       var onclick = !j.completed ? 'onclick="openJuzModal(' + j.juz + ')"' : '';
       html += '<div class="' + cls + '" ' + onclick + '>'
@@ -292,8 +292,8 @@
     if (isHalfTaken) selectedClaimType = "half";
 
     document.getElementById("modal-status-info").innerText = isHalfTaken
-      ? "One half is already claimed — only a half juz is available."
-      : "This juz is free — claim the full juz or just a half.";
+  ? "The 1st half is already claimed — you will be claiming the 2nd half."
+  : "This juz is free — claim the full juz or just the 1st half.";
 
     document.getElementById("claim-modal").classList.add("open");
   }
