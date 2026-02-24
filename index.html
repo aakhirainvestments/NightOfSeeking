@@ -185,12 +185,18 @@
     checkIn(raw);
   }
 
-  function checkIn(id) {
-    fetch(WEB_APP_URL + "?id=" + encodeURIComponent(id) + "&gender=" + GENDER)
-      .then(function(response) { return response.json(); })
-      .then(function(result) { showResult(result); })
-      .catch(function() { showResult({ status: "invalid" }); });
-  }
+ function checkIn(id) {
+  document.getElementById("scanner-view").style.display = "none";
+  document.getElementById("result").style.display = "block";
+  document.getElementById("result-icon").innerText = "⏳";
+  document.getElementById("result-heading").innerText = "Checking...";
+  document.getElementById("result-details").innerText = "";
+
+  fetch(WEB_APP_URL + "?id=" + encodeURIComponent(id) + "&gender=" + GENDER)
+    .then(function(response) { return response.json(); })
+    .then(function(result) { showResult(result); })
+    .catch(function() { showResult({ status: "invalid" }); });
+}
 
   function showResult(result) {
     document.getElementById("scanner-view").style.display = "none";
