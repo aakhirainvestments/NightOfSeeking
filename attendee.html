@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIGHT OF SEEKING — Your Night</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#faf6f0;--bg2:#f3ede4;--text:#1a1a1a;--accent:#6b1a2a;--accent2:#9c3a4a;
+      --accent-light:rgba(107,26,42,0.07);--accent-mid:rgba(107,26,42,0.15);
+      --border:rgba(107,26,42,0.15);--card:#ffffff;--card2:#fdf9f5;
+      --muted:#999;--muted2:#bbb;
+    }
+    body.male {
+      --bg:#0f1a10;--bg2:#162018;--text:#f0ebe0;--accent:#c9b99a;--accent2:#a89070;
+      --accent-light:rgba(201,185,154,0.08);--accent-mid:rgba(201,185,154,0.18);
+      --border:rgba(201,185,154,0.2);--card:#1a2a1c;--card2:#162018;
+      --muted:#6a8a6a;--muted2:#4a6a4a;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:Montserrat,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+    /* SIGN IN */
+    .signin-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;}
+    .signin-brand{font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--accent);margin-bottom:16px;}
+    .signin-title{font-family:"Cormorant Garamond",serif;font-size:clamp(42px,10vw,72px);font-weight:300;color:var(--text);text-align:center;line-height:1.05;margin-bottom:6px;}
+    .signin-title em{font-style:italic;color:var(--accent);}
+    .signin-subtitle{font-size:13px;color:var(--muted);letter-spacing:1px;text-align:center;margin-bottom:40px;}
+    .signin-divider{width:40px;height:1px;background:var(--accent);margin:16px auto 32px;}
+    .signin-card{width:100%;max-width:420px;background:var(--card);border:1px solid var(--border);border-radius:2px;padding:32px 28px;}
+    .signin-card p{font-size:13px;color:var(--muted);letter-spacing:1px;margin-bottom:20px;text-align:center;}
+    .field{margin-bottom:16px;}
+    .field label{display:block;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+    .field input{width:100%;padding:14px 16px;background:transparent;border:1px solid var(--border);color:var(--text);font-family:Montserrat,sans-serif;font-size:14px;outline:none;border-radius:1px;transition:border-color 0.2s;}
+    .field input:focus{border-color:var(--accent);}
+    .field input::placeholder{color:var(--muted2);}
+    .btn-primary{width:100%;padding:14px;background:var(--accent);color:var(--bg);border:none;font-family:Montserrat,sans-serif;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:1px;transition:opacity 0.2s;}
+    .btn-primary:hover{opacity:0.85;}
+    .btn-primary:disabled{opacity:0.4;cursor:not-allowed;}
+    .signin-feedback{font-size:12px;text-align:center;margin-top:12px;min-height:18px;color:var(--accent);letter-spacing:1px;}
+
+    /* DASHBOARD */
+    .dashboard{display:none;padding-bottom:80px;}
+    .dash-header{padding:48px 24px 32px;text-align:center;border-bottom:1px solid var(--border);}
+    .dash-brand{font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
+    .dash-org{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
+    .dash-welcome{font-family:"Cormorant Garamond",serif;font-size:clamp(28px,7vw,48px);font-weight:300;line-height:1.2;color:var(--text);}
+    .dash-welcome em{font-style:italic;color:var(--accent);}
+    .dash-divider{width:40px;height:1px;background:var(--accent);margin:16px auto;}
+    .dash-tagline{font-size:12px;color:var(--muted);letter-spacing:1px;}
+    .content{max-width:640px;margin:0 auto;padding:0 20px;}
+
+    .section-header{display:flex;align-items:baseline;gap:10px;margin:32px 0 14px;}
+    .section-header h2{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:300;color:var(--text);}
+    .section-header span{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);}
+
+    .card{background:var(--card);border:1px solid var(--border);border-radius:2px;overflow:hidden;}
+    .card+.card{margin-top:12px;}
+    .card-inner{padding:20px;}
+
+    /* MY NIGHT GRID */
+    .my-night-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .my-night-item{background:var(--bg2);border:1px solid var(--border);border-radius:2px;padding:14px;}
+    .my-night-item.full-width{grid-column:1/-1;}
+    .item-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+    .item-value{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:300;color:var(--text);line-height:1.2;}
+    .item-sub{font-size:11px;color:var(--muted);margin-top:3px;}
+
+    /* KHATAM */
+    .khatam-card-inner{padding:20px;}
+    .khatam-juz-display{display:flex;align-items:center;gap:16px;margin-bottom:16px;}
+    .khatam-juz-num{font-family:"Cormorant Garamond",serif;font-size:56px;font-weight:300;color:var(--accent);line-height:1;}
+    .khatam-juz-info{flex:1;}
+    .khatam-juz-info h3{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:300;color:var(--text);}
+    .khatam-juz-info p{font-size:12px;color:var(--muted);margin-top:4px;}
+    .khatam-progress-track{height:3px;background:var(--border);border-radius:2px;margin:12px 0 6px;overflow:hidden;}
+    .khatam-progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.6s ease;}
+    .khatam-progress-label{font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:14px;}
+    .complete-juz-btn{width:100%;padding:13px;background:var(--accent);color:var(--bg);border:none;font-family:Montserrat,sans-serif;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:1px;transition:opacity 0.2s;}
+    .complete-juz-btn:hover{opacity:0.85;}
+    .complete-juz-btn:disabled{opacity:0.4;cursor:not-allowed;}
+    .complete-juz-btn.done{background:var(--muted);cursor:default;opacity:1;}
+    .khatam-feedback{font-size:12px;text-align:center;margin-top:10px;color:var(--accent);min-height:16px;letter-spacing:1px;}
+
+    /* KHATAM ACTION ROW */
+    .khatam-action-row{display:flex;gap:8px;margin-top:0;}
+    .khatam-action-row .complete-juz-btn{flex:1;}
+    .view-khatam-btn{flex:0 0 auto;padding:13px 16px;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:Montserrat,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border-radius:1px;display:flex;align-items:center;white-space:nowrap;transition:border-color 0.2s,color 0.2s;}
+    .view-khatam-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+    /* ACTIVITIES GRID — smart: 1 col if solo, 2 col if both */
+    .activities-grid{display:grid;gap:10px;}
+    .activities-grid.two-up{grid-template-columns:1fr 1fr;}
+    .activities-grid.one-up{grid-template-columns:1fr;}
+    .activity-item{background:var(--bg2);border:1px solid var(--border);border-radius:2px;padding:14px;}
+    .activity-item .item-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+    .activity-item .item-value{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:300;color:var(--text);}
+    .activity-item .item-sub{font-size:11px;color:var(--muted);margin-top:3px;}
+
+    /* Q&A inner */
+    .qna-inner-label{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:300;color:var(--text);margin-bottom:8px;}
+    .qna-inner-body{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px;}
+
+    /* TIMELINE */
+    .timeline{padding:4px 0;}
+    .timeline-item{display:flex;gap:14px;padding:14px 20px;border-bottom:1px solid var(--border);transition:background 0.2s;}
+    .timeline-item:last-child{border-bottom:none;}
+    .timeline-item.now{background:var(--accent-light);border-left:3px solid var(--accent);}
+    .timeline-item.past{opacity:0.4;}
+    .timeline-time{font-size:11px;letter-spacing:1px;color:var(--accent);font-weight:600;min-width:52px;padding-top:2px;flex-shrink:0;}
+    .timeline-content{flex:1;}
+    .timeline-title{font-size:14px;color:var(--text);font-weight:500;line-height:1.3;}
+    .timeline-sub{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4;}
+    .timeline-duration{font-size:10px;color:var(--muted2);margin-top:3px;letter-spacing:1px;}
+    .now-badge{font-size:9px;letter-spacing:2px;text-transform:uppercase;background:var(--accent);color:var(--bg);padding:2px 8px;border-radius:1px;display:inline-block;margin-bottom:4px;}
+    .timeline-loading{padding:24px;text-align:center;font-size:12px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+
+    /* IBADAH */
+    .ibadah-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .ibadah-card{background:var(--card);border:1px solid var(--border);border-radius:2px;padding:18px 16px;cursor:pointer;transition:border-color 0.2s,transform 0.15s;}
+    .ibadah-card:hover{border-color:var(--accent);transform:translateY(-1px);}
+    .ibadah-card:active{transform:translateY(0);}
+    .ibadah-icon{font-size:28px;margin-bottom:10px;display:block;}
+    .ibadah-title{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:400;color:var(--text);margin-bottom:6px;}
+    .ibadah-arabic{font-size:16px;color:var(--accent);margin-bottom:8px;direction:rtl;}
+    .ibadah-text{font-size:11px;color:var(--muted);line-height:1.6;}
+
+    /* Q&A */
+    .qna-card-inner{padding:20px;}
+    .qna-card-inner h3{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:300;color:var(--text);margin-bottom:8px;}
+    .qna-card-inner p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;}
+    .link-btn{display:block;width:100%;padding:13px;text-align:center;text-decoration:none;background:transparent;border:1px solid var(--border);color:var(--text);font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border-radius:1px;transition:border-color 0.2s,background 0.2s;margin-bottom:8px;cursor:pointer;}
+    .link-btn:hover{border-color:var(--accent);background:var(--accent-light);}
+    .link-btn.primary{background:var(--accent);color:var(--bg);border-color:var(--accent);}
+    .link-btn.primary:hover{opacity:0.85;background:var(--accent);}
+
+    /* FOOTER */
+    .dash-footer{text-align:center;padding:32px 20px;border-top:1px solid var(--border);margin-top:40px;}
+    .dash-footer p{font-size:12px;color:var(--muted);letter-spacing:1px;}
+    .dash-footer .arabic{font-size:18px;color:var(--accent);margin-top:8px;}
+
+    /* MODAL */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:100;align-items:flex-end;justify-content:center;}
+    .modal-overlay.open{display:flex;animation:fadeIn 0.2s;}
+    @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+    .ibadah-modal{background:var(--bg);width:100%;max-width:640px;border-radius:4px 4px 0 0;padding:28px 24px 50px;animation:slideUp 0.25s ease;border-top:1px solid var(--border);max-height:80vh;overflow-y:auto;}
+    @keyframes slideUp{from{transform:translateY(30px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+    .ibadah-modal-icon{font-size:40px;text-align:center;margin-bottom:10px;}
+    .ibadah-modal-title{font-family:"Cormorant Garamond",serif;font-size:30px;font-weight:300;text-align:center;color:var(--text);margin-bottom:6px;}
+    .ibadah-modal-arabic{font-size:22px;color:var(--accent);text-align:center;margin-bottom:16px;direction:rtl;}
+    .ibadah-modal-divider{width:40px;height:1px;background:var(--accent);margin:0 auto 20px;}
+    .ibadah-modal-body{font-size:14px;color:var(--text);line-height:1.8;}
+    .ibadah-modal-body p{margin-bottom:12px;}
+    .ibadah-modal-body .hadith{background:var(--accent-light);border-left:2px solid var(--accent);padding:12px 16px;font-style:italic;font-size:13px;color:var(--muted);margin:16px 0;border-radius:0 2px 2px 0;}
+    .ibadah-modal-close{width:100%;padding:13px;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:1px;margin-top:20px;}
+  </style>
+</head>
+<body>
+
+  <!-- SIGN IN -->
+  <div class="signin-screen" id="signin-screen">
+    <p class="signin-brand">Aakhira Investments</p>
+    <h1 class="signin-title">Night of <em>Seeking</em></h1>
+    <div class="signin-divider"></div>
+    <p class="signin-subtitle" id="signin-subtitle">Sisters Itikaaf · Your Personal Portal</p>
+    <div class="signin-card">
+      <p>Enter the email address you registered with</p>
+      <div class="field">
+        <label>Email Address</label>
+        <input type="email" id="signin-email" placeholder="your@email.com" onkeydown="if(event.key==='Enter') signIn()">
+      </div>
+      <button class="btn-primary" id="signin-btn" onclick="signIn()">Access My Night</button>
+      <p class="signin-feedback" id="signin-feedback"></p>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="dashboard" id="dashboard">
+
+    <div class="dash-header">
+      <p class="dash-brand">Aakhira Investments</p>
+      <p class="dash-org" id="dash-org">Sisters Itikaaf</p>
+      <h1 class="dash-welcome" id="dash-welcome">Welcome, <em>—</em></h1>
+      <div class="dash-divider"></div>
+      <p class="dash-tagline">Your programme for the night 🌙</p>
+    </div>
+
+    <div class="content">
+
+      <!-- 1. MY NIGHT — TO DO LIST -->
+      <div class="section-header">
+        <h2>My Night</h2>
+        <span>To Do List</span>
+      </div>
+      <div class="card" id="my-night-card">
+
+        <!-- KHATAM — full width top section, hidden until loaded -->
+        <div id="khatam-section" style="display:none;">
+          <div class="khatam-card-inner">
+            <div class="khatam-juz-display">
+              <div class="khatam-juz-num" id="khatam-juz-num">—</div>
+              <div class="khatam-juz-info">
+                <h3 id="khatam-juz-title">—</h3>
+                <p id="khatam-juz-sub">Loading...</p>
+              </div>
+            </div>
+            <div class="khatam-progress-track">
+              <div class="khatam-progress-fill" id="khatam-progress-fill" style="width:0%"></div>
+            </div>
+            <p class="khatam-progress-label" id="khatam-progress-label">Loading khatam progress...</p>
+            <div class="khatam-action-row">
+              <button class="complete-juz-btn" id="complete-juz-btn" onclick="completeMyJuz()">Mark My Juz Complete ✓</button>
+              <a class="view-khatam-btn" id="khatam-full-link" href="#" target="_blank">View Full Khatam →</a>
+            </div>
+            <p class="khatam-feedback" id="khatam-feedback"></p>
+          </div>
+        </div>
+
+        <!-- ACTIVITIES — archery + MMA, smart layout -->
+        <div id="activities-section" style="display:none;border-top:1px solid var(--border);">
+          <div class="card-inner" style="padding-top:16px;padding-bottom:16px;">
+            <div id="activities-grid" class="activities-grid">
+              <!-- populated by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Q&A — inside the card -->
+        <div style="border-top:1px solid var(--border);">
+          <div class="card-inner">
+            <p class="qna-inner-label">Got a question for the speaker?</p>
+            <p class="qna-inner-body">Submit your question anonymously or with your name. Upvote questions you want answered. The most popular questions get answered first.</p>
+            <a class="link-btn primary" id="qna-link" href="#" target="_blank">Submit or Upvote Questions →</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 2. PROGRAMME -->
+      <div class="section-header">
+        <h2>Tonight's Programme</h2>
+        <span id="prog-date-label">March 2026</span>
+      </div>
+      <div class="card">
+        <div class="timeline" id="timeline-container">
+          <div class="timeline-loading">Loading programme...</div>
+        </div>
+      </div>
+
+      <!-- 3. IBADAH -->
+      <div class="section-header">
+        <h2>Acts of Ibadah</h2>
+        <span>Benefits & Encouragement</span>
+      </div>
+      <div class="ibadah-grid">
+        <div class="ibadah-card" onclick="openIbadah('dhikr')">
+          <span class="ibadah-icon">📿</span>
+          <p class="ibadah-title">Dhikr</p>
+          <p class="ibadah-arabic">ذِكْرُ اللهِ</p>
+          <p class="ibadah-text">The greatest remembrance. Tap to read more.</p>
+        </div>
+        <div class="ibadah-card" onclick="openIbadah('quran')">
+          <span class="ibadah-icon">📖</span>
+          <p class="ibadah-title">Quran</p>
+          <p class="ibadah-arabic">تِلَاوَةُ الْقُرْآن</p>
+          <p class="ibadah-text">Every letter is ten rewards. Tap to read more.</p>
+        </div>
+        <div class="ibadah-card" onclick="openIbadah('dua')">
+          <span class="ibadah-icon">🤲</span>
+          <p class="ibadah-title">Duʿā</p>
+          <p class="ibadah-arabic">الدُّعَاء</p>
+          <p class="ibadah-text">The weapon of the believer. Tap to read more.</p>
+        </div>
+        <div class="ibadah-card" onclick="openIbadah('salah')">
+          <span class="ibadah-icon">🙏</span>
+          <p class="ibadah-title">Qiyam</p>
+          <p class="ibadah-arabic">قِيَامُ اللَّيْل</p>
+          <p class="ibadah-text">Standing in the night for Allah. Tap to read more.</p>
+        </div>
+      </div>
+
+      <div class="dash-footer">
+        <p>May Allah accept from us all and grant us a blessed night</p>
+        <p class="arabic">اللَّهُمَّ بَلِّغْنَا رَمَضَان</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- IBADAH MODAL -->
+  <div class="modal-overlay" id="ibadah-modal" onclick="closeIbadahModal(event)">
+    <div class="ibadah-modal">
+      <div class="ibadah-modal-icon" id="im-icon"></div>
+      <h2 class="ibadah-modal-title" id="im-title"></h2>
+      <p class="ibadah-modal-arabic" id="im-arabic"></p>
+      <div class="ibadah-modal-divider"></div>
+      <div class="ibadah-modal-body" id="im-body"></div>
+      <button class="ibadah-modal-close" onclick="closeAllModals()">Close</button>
+    </div>
+  </div>
+
+<script>
+  var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbygzZSNdSrUQfzs86AyQKQHkk0FpMrcab-Aw9JrUy7OVOIPdsQYnQ90U0ra6vgWASh70A/exec";
+  var params = new URLSearchParams(window.location.search);
+  var GENDER = (params.get("gender") || "FEMALE").toUpperCase();
+  var BASE = "https://aakhirainvestments.github.io/NightOfSeeking/";
+  var isFemale = GENDER === "FEMALE";
+
+  if (!isFemale) document.body.classList.add("male");
+
+  document.getElementById("signin-subtitle").innerText = isFemale ? "Sisters Itikaaf · Your Personal Portal" : "Brothers Itikaaf · Your Personal Portal";
+  document.getElementById("dash-org").innerText = isFemale ? "Sisters Itikaaf" : "Brothers Itikaaf";
+  document.getElementById("prog-date-label").innerText = isFemale ? "14 March 2026" : "7 March 2026";
+  document.getElementById("qna-link").href = BASE + "qna.html?gender=" + GENDER;
+  document.getElementById("khatam-full-link").href = BASE + "khatam.html?gender=" + GENDER;
+
+  var ATTENDEE = null;
+
+  // ---- IBADAH CONTENT ----
+  var IBADAH_CONTENT = {
+    dhikr: {
+      icon: "📿", title: "Dhikr", arabic: "ذِكْرُ اللهِ",
+      body: `<p>Dhikr is the remembrance of Allah — the Prophet ﷺ told us it is the best of deeds, lighter on the tongue but heavy on the scales.</p>
+        <div class="hadith">"Shall I not tell you of the best of your deeds, the purest of them in the sight of your Lord, the highest of them in your ranks, better for you than spending gold and silver?" They said: Yes. He ﷺ said: <strong>The remembrance of Allah.</strong><br><em>(Tirmidhi)</em></div>
+        <p>Some of the most beloved phrases of dhikr:</p>
+        <p style="font-size:18px;direction:rtl;line-height:2.4;color:var(--accent);">سُبْحَانَ اللهِ<br>الْحَمْدُ لِلَّهِ<br>لَا إِلَٰهَ إِلَّا اللهُ<br>اللهُ أَكْبَرُ</p>
+        <p>Let your tongue be busy between every act of worship tonight. Even while waiting, walking, or sitting — every moment is an opportunity.</p>`
+    },
+    quran: {
+      icon: "📖", title: "Quran", arabic: "تِلَاوَةُ الْقُرْآن",
+      body: `<p>The Quran is the speech of Allah — and reciting it is one of the most beloved acts a believer can engage in.</p>
+        <div class="hadith">"Whoever recites a letter from the Book of Allah, he will receive one good deed as ten good deeds like it."<br><em>(Tirmidhi)</em></div>
+        <p>Tonight we are completing a collective Khatam — together, this community will recite the entire Quran in one night. Every juz you complete is your share of this blessed effort.</p>
+        <div class="hadith">"The best of you is the one who learns the Quran and teaches it."<br><em>(Bukhari)</em></div>
+        <p>Once you have completed your juz, keep going — recite any surah you know. Even listening to the Quran is an act of worship.</p>`
+    },
+    dua: {
+      icon: "🤲", title: "Duʿā", arabic: "الدُّعَاء",
+      body: `<p>Duʿā is a direct conversation between you and your Lord. Tonight — in the last third of the night — the doors of response are wide open.</p>
+        <div class="hadith">"Our Lord descends to the lowest heaven in the last third of every night and says: Who is calling upon Me that I may answer? Who is asking Me that I may give? Who is seeking My forgiveness that I may forgive?"<br><em>(Bukhari & Muslim)</em></div>
+        <p>During Witr tonight, ask for everything. Don't hold back — Allah loves to be asked.</p>
+        <div class="hadith">"Duʿā is worship."<br><em>(Tirmidhi)</em></div>
+        <p>Especially blessed moments for duʿā tonight:<br>🌙 In sujood<br>🌙 Between adhān and iqāmah of Fajr<br>🌙 In the last third of the night (after 2am)<br>🌙 After every ṣalāh</p>`
+    },
+    salah: {
+      icon: "🙏", title: "Qiyam al-Layl", arabic: "قِيَامُ اللَّيْل",
+      body: `<p>Qiyam al-Layl — standing in prayer at night — is one of the greatest acts of worship and was the consistent practice of the Prophet ﷺ.</p>
+        <div class="hadith">"The best prayer after the obligatory prayers is the night prayer."<br><em>(Muslim)</em></div>
+        <p>Tonight we pray Tasbīḥ Salah, Witr, and Fajr together. These are opportunities that many people sleep through their entire lives.</p>
+        <div class="hadith">"Stick to night prayer, for it is a means of nearness to Allah, an expiation for bad deeds, a prevention of sin, and a repeller of disease from the body."<br><em>(Tirmidhi)</em></div>
+        <p>In sujood tonight, know that you are in the closest position a human being can be to their Creator. Linger there. Whisper what is in your heart. This is your moment. 🤍</p>`
+    }
+  };
+
+  // ---- SIGN IN ----
+  function signIn() {
+    var email = document.getElementById("signin-email").value.trim();
+    var feedback = document.getElementById("signin-feedback");
+    var btn = document.getElementById("signin-btn");
+    if (!email) { feedback.innerText = "Please enter your email"; return; }
+    btn.disabled = true; feedback.innerText = "Looking you up...";
+
+    fetch(WEB_APP_URL + "?action=getAttendeeInfo&email=" + encodeURIComponent(email) + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.error) { feedback.innerText = data.error; btn.disabled = false; }
+        else { ATTENDEE = data; showDashboard(); }
+      })
+      .catch(function() { feedback.innerText = "Could not connect. Check your connection."; btn.disabled = false; });
+  }
+
+  function showDashboard() {
+    document.getElementById("signin-screen").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
+    document.getElementById("dash-welcome").innerHTML = "Welcome, <em>" + escapeHtml(ATTENDEE.firstName || ATTENDEE.name || "you") + "</em>";
+    loadProgramme();
+    renderMyNight();
+    renderKhatam();
+  }
+
+  // ---- PROGRAMME (from sheet) ----
+  function loadProgramme() {
+    var container = document.getElementById("timeline-container");
+    fetch(WEB_APP_URL + "?action=getProgramme&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.programme && data.programme.length > 0) {
+          renderTimeline(data.programme);
+        } else {
+          container.innerHTML = '<div class="timeline-loading">Programme coming soon</div>';
+        }
+      })
+      .catch(function() {
+        container.innerHTML = '<div class="timeline-loading">Could not load programme</div>';
+      });
+  }
+
+  function renderTimeline(programme) {
+    var container = document.getElementById("timeline-container");
+    var now = new Date();
+    var currentMins = now.getHours() * 60 + now.getMinutes();
+
+    function toMins(t) {
+      if (!t) return null;
+      var parts = String(t).split(":");
+      var h = parseInt(parts[0]); var m = parseInt(parts[1] || 0);
+      if (h < 6) h += 24; // after midnight counts as next morning
+      return h * 60 + m;
+    }
+
+    var html = "";
+    programme.forEach(function(item, i) {
+      var startMins = toMins(item.timeStart);
+      var endMins = item.timeEnd ? toMins(item.timeEnd) : (i < programme.length - 1 ? toMins(programme[i+1].timeStart) : startMins + 30);
+      var isNow = startMins !== null && currentMins >= startMins && currentMins < endMins;
+      var isPast = endMins !== null && currentMins >= endMins;
+      var cls = "timeline-item" + (isNow ? " now" : "") + (isPast ? " past" : "");
+
+      html += '<div class="' + cls + '">'
+        + '<div class="timeline-time">' + escapeHtml(item.timeStart)
+        + (item.timeEnd ? '<br><span style="font-size:9px;color:var(--muted2);">↓ ' + escapeHtml(item.timeEnd) + '</span>' : '')
+        + '</div>'
+        + '<div class="timeline-content">'
+        + (isNow ? '<span class="now-badge">Now</span><br>' : '')
+        + '<p class="timeline-title">' + escapeHtml(item.title) + '</p>'
+        + (item.sub ? '<p class="timeline-sub">' + escapeHtml(item.sub) + '</p>' : '')
+        + (item.duration ? '<p class="timeline-duration">' + escapeHtml(item.duration) + '</p>' : '')
+        + '</div></div>';
+    });
+
+    container.innerHTML = html || '<div class="timeline-loading">No programme items found</div>';
+  }
+
+  // ---- MY NIGHT ----
+  function renderMyNight() {
+    var hasArchery = !!ATTENDEE.archeryGroup;
+    var hasMma = !!ATTENDEE.mma;
+    var actSection = document.getElementById("activities-section");
+    var actGrid = document.getElementById("activities-grid");
+
+    if (hasArchery || hasMma) {
+      actSection.style.display = "block";
+      actGrid.className = "activities-grid " + (hasArchery && hasMma ? "two-up" : "one-up");
+      var html = "";
+      if (hasArchery) {
+        html += '<div class="activity-item">'
+          + '<p class="item-label">🏹 Archery</p>'
+          + '<p class="item-value">' + escapeHtml(ATTENDEE.archeryGroup) + '</p>'
+          + '<p class="item-sub">Your assigned group</p>'
+          + '</div>';
+      }
+      if (hasMma) {
+        html += '<div class="activity-item">'
+          + '<p class="item-label">🥊 ' + (isFemale ? "MMA / Self Defence" : "Wrestling") + '</p>'
+          + '<p class="item-value">Registered</p>'
+          + '<p class="item-sub">Check in at the activity area</p>'
+          + '</div>';
+      }
+      actGrid.innerHTML = html;
+    }
+    // If no activities, leave section hidden — khatam and Q&A are still visible
+  }
+
+  // ---- KHATAM ----
+  function renderKhatam() {
+    if (!ATTENDEE.khatamJuz) return;
+    document.getElementById("khatam-section").style.display = "block";
+    document.getElementById("khatam-juz-num").innerText = ATTENDEE.khatamJuz;
+    document.getElementById("khatam-juz-title").innerText = "Juz " + ATTENDEE.khatamJuz + (ATTENDEE.khatamIsHalf ? " (your half)" : "");
+    document.getElementById("khatam-juz-sub").innerText = ATTENDEE.khatamCompleted ? "Completed — BarakAllahu feek 🌙" : "Mark as complete once you've finished your recitation";
+
+    if (ATTENDEE.khatamCompleted) {
+      var btn = document.getElementById("complete-juz-btn");
+      btn.innerText = "✓ Juz Completed — BarakAllahu feek";
+      btn.classList.add("done");
+      btn.disabled = true;
+    }
+    loadKhatamProgress();
+  }
+
+  function loadKhatamProgress() {
+    fetch(WEB_APP_URL + "?action=getKhatam&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        // Handle both possible response formats
+        var totalCompleted = 0, totalJuz = 0;
+        var khatams = data.khatams || [];
+        if (khatams.length > 0) {
+          khatams.forEach(function(k) {
+            var juzList = k.juzList || k.juz || [];
+            totalJuz += 30;
+            juzList.forEach(function(j) { if (j.completed || j.status === "Completed") totalCompleted++; });
+          });
+        } else if (data.blocks) {
+          // fallback if returned as blocks
+          data.blocks.forEach(function(b) {
+            totalJuz++;
+            if (b.completed) totalCompleted++;
+          });
+        }
+        var pct = totalJuz > 0 ? Math.round((totalCompleted / totalJuz) * 100) : 0;
+        document.getElementById("khatam-progress-fill").style.width = pct + "%";
+        document.getElementById("khatam-progress-label").innerText = "Community progress: " + totalCompleted + " / " + totalJuz + " juz (" + pct + "%)";
+      })
+      .catch(function() {
+        document.getElementById("khatam-progress-label").innerText = "Could not load khatam progress";
+      });
+  }
+
+  function completeMyJuz() {
+    var btn = document.getElementById("complete-juz-btn");
+    var feedback = document.getElementById("khatam-feedback");
+    if (!ATTENDEE || !ATTENDEE.khatamJuz) return;
+    btn.disabled = true; feedback.innerText = "Marking complete...";
+
+    fetch(WEB_APP_URL + "?action=completeJuz&juz=" + ATTENDEE.khatamJuz + "&name=" + encodeURIComponent(ATTENDEE.name) + "&khatam=" + (ATTENDEE.khatamNum || 1) + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          ATTENDEE.khatamCompleted = true;
+          feedback.innerText = "BarakAllahu feek! Marked complete 🌙";
+          btn.innerText = "✓ Juz Completed — BarakAllahu feek";
+          btn.classList.add("done");
+          renderMyNight();
+          loadKhatamProgress();
+        } else {
+          feedback.innerText = data.error || "Something went wrong";
+          btn.disabled = false;
+        }
+      })
+      .catch(function() { feedback.innerText = "Could not update. Check connection."; btn.disabled = false; });
+  }
+
+  // ---- IBADAH MODALS ----
+  function openIbadah(key) {
+    var d = IBADAH_CONTENT[key]; if (!d) return;
+    document.getElementById("im-icon").innerText = d.icon;
+    document.getElementById("im-title").innerText = d.title;
+    document.getElementById("im-arabic").innerText = d.arabic;
+    document.getElementById("im-body").innerHTML = d.body;
+    document.getElementById("ibadah-modal").classList.add("open");
+  }
+  function closeIbadahModal(e) { if (e.target === e.currentTarget) closeAllModals(); }
+  function closeAllModals() { document.querySelectorAll(".modal-overlay").forEach(function(m) { m.classList.remove("open"); }); }
+
+  function escapeHtml(s) { return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
+</script>
+</body>
+</html>
