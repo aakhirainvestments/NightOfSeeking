@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIGHT OF SEEKING — Volunteer Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf6f0;
+      --text: #1a1a1a;
+      --accent: #6b1a2a;
+      --accent-light: rgba(107, 26, 42, 0.07);
+      --border: rgba(107, 26, 42, 0.15);
+      --card: #ffffff;
+      --muted: #999;
+      --danger: #c0392b;
+      --success: #2e7d32;
+      --claim-open: #2e7d32;
+      --claim-mine: #6b1a2a;
+      --claim-full: #999;
+    }
+    body.male {
+      --bg: #0f1a10;
+      --text: #f0ebe0;
+      --accent: #c9b99a;
+      --accent-light: rgba(201, 185, 154, 0.08);
+      --border: rgba(201, 185, 154, 0.2);
+      --card: #1a2a1c;
+      --muted: #6a8a6a;
+      --danger: #e57373;
+      --success: #81c784;
+      --claim-open: #81c784;
+      --claim-mine: #c9b99a;
+      --claim-full: #6a8a6a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Montserrat, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
+
+    .header { padding: 50px 24px 32px; text-align: center; border-bottom: 1px solid var(--border); }
+    .brand { font-size: 11px; font-weight: 500; letter-spacing: 5px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .header h1 { font-family: "Cormorant Garamond", serif; font-size: clamp(36px, 8vw, 56px); font-weight: 300; color: var(--text); }
+    .header h1 em { font-style: italic; color: var(--accent); }
+    .divider { width: 40px; height: 1px; background: var(--accent); margin: 16px auto; }
+    .header p { font-size: 13px; color: var(--muted); letter-spacing: 1px; }
+
+    .quick-links { max-width: 640px; margin: 24px auto 0; padding: 0 20px; }
+    .quick-link { display: block; padding: 14px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 2px; text-align: center; text-decoration: none; color: var(--text); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; transition: border-color 0.2s; }
+    .quick-link:hover { border-color: var(--accent); }
+    .quick-link .ql-icon { font-size: 20px; display: block; margin-bottom: 6px; }
+
+    .tabs { display: flex; max-width: 640px; margin: 24px auto 0; padding: 0 20px; }
+    .tab { flex: 1; padding: 12px; text-align: center; background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: Montserrat, sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+    .tab:first-child { border-radius: 2px 0 0 2px; }
+    .tab:last-child { border-radius: 0 2px 2px 0; border-left: none; }
+    .tab:not(:first-child):not(:last-child) { border-left: none; }
+    .tab.active { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .section { max-width: 640px; margin: 32px auto 0; padding: 0 20px; }
+    .section-title { font-family: "Cormorant Garamond", serif; font-size: 26px; font-weight: 300; color: var(--text); margin-bottom: 16px; }
+
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+    .field input, .field select { width: 100%; padding: 12px 14px; background: transparent; border: 1px solid var(--border); color: var(--text); font-family: Montserrat, sans-serif; font-size: 14px; outline: none; border-radius: 1px; transition: border-color 0.2s; }
+    .field input:focus { border-color: var(--accent); }
+    .field input::placeholder { color: var(--muted); }
+    .field select option { background: var(--bg); color: var(--text); }
+
+    .btn-primary { width: 100%; padding: 14px; background: var(--accent); color: var(--bg); border: none; font-family: Montserrat, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; border-radius: 1px; transition: opacity 0.2s; margin-top: 4px; }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-secondary { width: 100%; padding: 12px; background: transparent; color: var(--muted); border: 1px solid var(--border); font-family: Montserrat, sans-serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; border-radius: 1px; margin-top: 8px; transition: all 0.2s; }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .feedback { font-size: 12px; text-align: center; margin-top: 10px; min-height: 18px; color: var(--accent); letter-spacing: 1px; }
+
+    .vol-badge { background: var(--card); border: 1px solid var(--accent); border-radius: 2px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .vol-badge-name { font-family: "Cormorant Garamond", serif; font-size: 22px; }
+    .vol-badge-id { font-size: 11px; color: var(--muted); letter-spacing: 2px; }
+
+    .filter-bar { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+    .filter-btn { padding: 8px 16px; background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: Montserrat, sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-radius: 1px; transition: all 0.2s; }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+
+    .section-label { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin: 24px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+    /* BLOCKS */
+    .block { margin-bottom: 12px; border-radius: 2px; overflow: hidden; border: 1px solid var(--border); }
+    .block.completed-block { opacity: 0.55; }
+    .block-header { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--accent-light); cursor: pointer; user-select: none; border-bottom: 1px solid var(--border); }
+    .block.collapsed .block-header { border-bottom: none; }
+
+    .block-time-range { font-size: 11px; letter-spacing: 1px; color: var(--accent); text-transform: uppercase; font-weight: 600; white-space: nowrap; }
+    .block-name { font-family: "Cormorant Garamond", serif; font-size: 20px; font-weight: 300; flex: 1; min-width: 0; }
+    .block-count { font-size: 11px; color: var(--muted); letter-spacing: 1px; white-space: nowrap; }
+    .block-chevron { font-size: 11px; color: var(--muted); transition: transform 0.2s; flex-shrink: 0; }
+    .block.collapsed .block-chevron { transform: rotate(-90deg); }
+
+    .block-admin-btns { display: none; align-items: center; gap: 4px; flex-shrink: 0; }
+    body.admin-mode .block-admin-btns { display: flex; }
+    .icon-btn { width: 28px; height: 28px; background: transparent; border: 1px solid var(--border); color: var(--muted); cursor: pointer; border-radius: 1px; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .icon-btn.danger:hover { border-color: var(--danger); color: var(--danger); }
+
+    .block-tasks { background: var(--card); }
+    .block.collapsed .block-tasks { display: none; }
+
+    /* TASK ROW */
+    .task-row { display: flex; align-items: flex-start; gap: 10px; padding: 14px 14px; border-bottom: 1px solid var(--border); }
+    .task-row:last-child { border-bottom: none; }
+    .task-row.completed-task { opacity: 0.45; }
+    .task-row.i-claimed { background: var(--accent-light); border-left: 2px solid var(--accent); }
+
+    .task-check { width: 26px; height: 26px; border: 1px solid var(--border); border-radius: 1px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: background 0.2s; font-size: 13px; margin-top: 2px; }
+    .task-row.completed-task .task-check { background: var(--success); border-color: var(--success); color: white; }
+
+    .task-info { flex: 1; min-width: 0; }
+    .task-name { font-size: 14px; color: var(--text); line-height: 1.4; }
+    .task-row.completed-task .task-name { text-decoration: line-through; }
+    .task-time-badge { display: inline-block; font-size: 10px; letter-spacing: 1px; color: var(--accent); border: 1px solid var(--border); padding: 2px 7px; border-radius: 1px; margin-top: 4px; }
+    .task-claimers-row { display: flex; align-items: center; gap: 8px; margin-top: 5px; flex-wrap: wrap; }
+    .task-spots { font-size: 11px; color: var(--muted); }
+    .task-spots.full { color: var(--danger); }
+    .task-spots.mine { color: var(--accent); }
+    .claimer-chip { font-size: 10px; padding: 2px 8px; background: var(--accent-light); border: 1px solid var(--border); border-radius: 10px; color: var(--muted); }
+    .claimer-chip.is-me { color: var(--accent); border-color: var(--accent); }
+
+    .task-actions { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; align-items: flex-end; }
+
+    /* CLAIM BUTTON STATES */
+    .task-claim-btn { padding: 6px 14px; border: 1px solid; font-family: Montserrat, sans-serif; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-radius: 1px; white-space: nowrap; transition: all 0.2s; font-weight: 500; }
+    .task-claim-btn.open { background: transparent; border-color: var(--claim-open); color: var(--claim-open); }
+    .task-claim-btn.open:hover { background: var(--claim-open); color: var(--bg); }
+    .task-claim-btn.claimed-by-me { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+    .task-claim-btn.unclaim { background: transparent; border-color: var(--danger); color: var(--danger); font-size: 9px; }
+    .task-claim-btn.unclaim:hover { background: var(--danger); color: white; }
+    .task-claim-btn.full-btn { background: transparent; border-color: var(--claim-full); color: var(--claim-full); cursor: default; font-size: 9px; }
+
+    .task-admin-btns { display: none; gap: 4px; }
+    body.admin-mode .task-admin-btns { display: flex; }
+
+    /* ADD TASK INLINE */
+    .add-task-row { padding: 8px 14px; border-top: 1px dashed var(--border); display: flex; gap: 8px; align-items: center; background: var(--card); }
+    .add-task-row input { flex: 1; padding: 7px 10px; background: transparent; border: 1px solid var(--border); color: var(--text); font-family: Montserrat, sans-serif; font-size: 13px; outline: none; border-radius: 1px; }
+    .add-task-row input::placeholder { color: var(--muted); }
+    .add-task-row input:focus { border-color: var(--accent); }
+    .add-task-row button { padding: 7px 14px; background: var(--accent); color: var(--bg); border: none; font-family: Montserrat, sans-serif; font-size: 11px; font-weight: 600; cursor: pointer; border-radius: 1px; white-space: nowrap; }
+
+    /* ADD BLOCK FORM */
+    .add-block-form { background: var(--card); border: 1px solid var(--border); border-radius: 2px; padding: 20px; margin-bottom: 20px; }
+    .add-block-form h4 { font-family: "Cormorant Garamond", serif; font-size: 20px; font-weight: 300; margin-bottom: 14px; color: var(--text); }
+    .inline-fields { display: flex; gap: 10px; flex-wrap: wrap; }
+    .inline-fields .field { flex: 1; min-width: 100px; margin-bottom: 0; }
+
+    .task-list-builder { margin-top: 14px; }
+    .task-list-builder > label { display: block; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+
+    .task-builder-row { background: var(--bg); border: 1px solid var(--border); border-radius: 2px; padding: 12px; margin-bottom: 8px; position: relative; }
+    .task-builder-row-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .task-builder-row-header span { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+    .task-builder-fields { display: flex; gap: 8px; flex-wrap: wrap; }
+    .task-builder-fields input { padding: 9px 12px; background: transparent; border: 1px solid var(--border); color: var(--text); font-family: Montserrat, sans-serif; font-size: 13px; outline: none; border-radius: 1px; }
+    .task-builder-fields input:focus { border-color: var(--accent); }
+    .task-builder-fields input::placeholder { color: var(--muted); }
+    .task-builder-fields .task-name-input { flex: 2; min-width: 150px; }
+    .task-builder-fields .task-time-input { flex: 1; min-width: 80px; }
+    .task-builder-fields .task-max-input { width: 60px; flex-shrink: 0; text-align: center; }
+    .task-builder-labels { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+    .task-builder-labels span { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+    .task-builder-labels .l-name { flex: 2; min-width: 150px; }
+    .task-builder-labels .l-time { flex: 1; min-width: 80px; }
+    .task-builder-labels .l-max { width: 60px; text-align: center; }
+
+    .remove-task-btn { background: transparent; border: none; color: var(--danger); cursor: pointer; font-size: 18px; padding: 0 4px; line-height: 1; }
+    .add-more-task-btn { width: 100%; padding: 10px; background: transparent; border: 1px dashed var(--border); color: var(--muted); font-family: Montserrat, sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-radius: 1px; transition: all 0.2s; margin-top: 4px; }
+    .add-more-task-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-small { width: 100%; padding: 12px; background: var(--accent); color: var(--bg); border: none; font-family: Montserrat, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-radius: 1px; margin-top: 14px; }
+    .btn-small:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ADMIN TOGGLE */
+    .admin-toggle-bar { max-width: 640px; margin: 16px auto 0; padding: 0 20px; display: flex; justify-content: flex-end; }
+    .admin-toggle { padding: 8px 16px; background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: Montserrat, sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-radius: 1px; transition: all 0.2s; }
+    .admin-toggle.on { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+
+    .admin-btn { width: 100%; padding: 12px; background: transparent; border: 1px solid var(--border); color: var(--text); font-family: Montserrat, sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-radius: 1px; text-align: center; transition: border-color 0.2s; margin-bottom: 16px; }
+    .admin-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .vol-list { background: var(--card); border: 1px solid var(--border); border-radius: 2px; overflow: hidden; }
+    .vol-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border); gap: 12px; }
+    .vol-row:last-child { border-bottom: none; }
+    .vol-row-name { font-size: 14px; }
+    .vol-row-email { font-size: 11px; color: var(--muted); }
+    .vol-email-btn { padding: 6px 12px; background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: Montserrat, sans-serif; font-size: 10px; cursor: pointer; border-radius: 1px; transition: all 0.2s; flex-shrink: 0; }
+    .vol-email-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .refresh-bar { max-width: 640px; margin: 16px auto 0; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; }
+    .refresh-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: Montserrat, sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; padding: 8px 16px; cursor: pointer; border-radius: 1px; transition: all 0.2s; }
+    .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .last-updated { font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+    .loading { text-align: center; padding: 40px; font-size: 13px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+    .empty { text-align: center; padding: 30px; font-family: "Cormorant Garamond", serif; font-size: 20px; font-style: italic; color: var(--muted); }
+
+    /* EDIT MODAL */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: flex-end; justify-content: center; }
+    .modal-overlay.open { display: flex; animation: overlayIn 0.2s ease; }
+    @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+    .modal { background: var(--bg); width: 100%; max-width: 640px; border-radius: 4px 4px 0 0; padding: 28px 24px 40px; animation: slideUp 0.25s ease; border-top: 1px solid var(--border); }
+    @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-title { font-family: "Cormorant Garamond", serif; font-size: 24px; font-weight: 400; color: var(--text); margin-bottom: 20px; }
+    .signup-card { background: var(--card); border: 1px solid var(--border); border-radius: 2px; padding: 24px; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <p class="brand">Aakhira Investments</p>
+    <h1>Volunteer <em>Hub</em></h1>
+    <div class="divider"></div>
+    <p id="event-title">Night of Seeking</p>
+  </div>
+
+  <div class="quick-links">
+    <a class="quick-link" id="scanner-link" href="#" target="_blank">
+      <span class="ql-icon">📷</span>QR Check-In Scanner
+    </a>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('schedule')">Schedule & Tasks</button>
+    <button class="tab" onclick="switchTab('signup')">Sign Up</button>
+    <button class="tab" onclick="switchTab('admin')">Admin</button>
+  </div>
+
+  <!-- SCHEDULE TAB -->
+  <div class="tab-content active" id="tab-schedule">
+    <div class="admin-toggle-bar">
+      <button class="admin-toggle" id="admin-toggle" onclick="toggleAdminMode()">Admin Mode: Off</button>
+    </div>
+    <div class="refresh-bar">
+      <span class="last-updated" id="last-updated">Loading...</span>
+      <button class="refresh-btn" onclick="loadTasks()">↻ Refresh</button>
+    </div>
+    <div class="section" style="margin-top:16px;">
+      <div class="filter-bar">
+        <button class="filter-btn active" id="filter-all" onclick="setFilter('all')">All Tasks</button>
+        <button class="filter-btn" id="filter-mine" onclick="setFilter('mine')">My Tasks</button>
+        <button class="filter-btn" id="filter-open" onclick="setFilter('open')">Unclaimed</button>
+      </div>
+      <div id="schedule-container"><div class="loading">Loading schedule...</div></div>
+    </div>
+  </div>
+
+  <!-- SIGNUP TAB -->
+  <div class="tab-content" id="tab-signup">
+    <div class="section">
+      <div id="signup-view">
+        <div class="signup-card">
+          <p class="section-title" style="font-size:22px;margin-bottom:16px;">Join as a Volunteer</p>
+          <div class="field"><label>Full Name</label><input type="text" id="vol-name" placeholder="Your name"></div>
+          <div class="field"><label>Email</label><input type="email" id="vol-email" placeholder="your@email.com"></div>
+          <div class="field"><label>Phone (optional)</label><input type="tel" id="vol-phone" placeholder="e.g. 082 123 4567"></div>
+          <button class="btn-primary" id="signup-btn" onclick="signUp()">Sign Up as Volunteer</button>
+          <p class="feedback" id="signup-feedback"></p>
+        </div>
+      </div>
+      <div id="volunteer-view" style="display:none;">
+        <div class="vol-badge">
+          <div>
+            <p class="vol-badge-name" id="vol-display-name">—</p>
+            <p class="vol-badge-id" id="vol-display-id">ID: —</p>
+          </div>
+          <button class="btn-secondary" style="width:auto;margin:0;" onclick="emailMyTasks()">📧 Email My Tasks</button>
+        </div>
+        <p class="feedback" id="email-feedback" style="margin-top:10px;"></p>
+        <button class="btn-secondary" style="margin-top:16px;" onclick="switchTab('schedule');setFilter('mine')">View My Tasks →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN TAB -->
+  <div class="tab-content" id="tab-admin">
+    <div class="section">
+      <p class="section-title">Add Time Block</p>
+      <div class="add-block-form">
+        <h4>New Block</h4>
+        <div class="inline-fields">
+          <div class="field"><label>Block Name</label><input type="text" id="new-block-name" placeholder="e.g. Setup"></div>
+          <div class="field"><label>Start Time</label><input type="text" id="new-block-start" placeholder="e.g. 22:00"></div>
+          <div class="field"><label>End Time</label><input type="text" id="new-block-end" placeholder="e.g. 23:00"></div>
+        </div>
+
+        <div class="task-list-builder">
+          <label>Tasks</label>
+          <div class="task-builder-labels">
+            <span class="l-name">Task Name</span>
+            <span class="l-time">Time Slot</span>
+            <span class="l-max">Max People</span>
+          </div>
+          <div id="task-inputs">
+            <div class="task-builder-row">
+              <div class="task-builder-row-header"><span>Task 1</span></div>
+              <div class="task-builder-fields">
+                <input type="text" class="task-name-input task-input" placeholder="e.g. Set up archery range">
+                <input type="text" class="task-time-input task-time" placeholder="e.g. 22:15">
+                <input type="number" class="task-max-input task-max" placeholder="1" min="1" value="1">
+              </div>
+            </div>
+          </div>
+          <button class="add-more-task-btn" onclick="addTaskInput()">+ Add Another Task</button>
+        </div>
+
+        <button class="btn-small" id="save-block-btn" onclick="saveBlock()">Save Block & Tasks</button>
+        <p class="feedback" id="add-feedback"></p>
+      </div>
+
+      <p class="section-title" style="margin-bottom:12px;">Volunteers</p>
+      <button class="admin-btn" onclick="emailAll()">📧 Email All Volunteers Their Tasks</button>
+      <div id="vol-list-container"><div class="loading">Loading volunteers...</div></div>
+    </div>
+  </div>
+
+  <!-- EDIT MODAL -->
+  <div class="modal-overlay" id="edit-modal" onclick="closeModal(event)">
+    <div class="modal">
+      <p class="modal-title" id="edit-modal-title">Edit</p>
+      <div class="field"><label id="edit-label-1">Name</label><input type="text" id="edit-input-1"></div>
+      <div id="edit-extra-fields"></div>
+      <button class="btn-primary" id="edit-save-btn" onclick="saveEdit()">Save Changes</button>
+      <button class="btn-secondary" onclick="closeAllModals()">Cancel</button>
+      <p class="feedback" id="edit-feedback"></p>
+    </div>
+  </div>
+
+<script>
+  var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbygzZSNdSrUQfzs86AyQKQHkk0FpMrcab-Aw9JrUy7OVOIPdsQYnQ90U0ra6vgWASh70A/exec";
+  var params = new URLSearchParams(window.location.search);
+  var GENDER = (params.get("gender") || "FEMALE").toUpperCase();
+
+  if (GENDER === "MALE") document.body.classList.add("male");
+  document.getElementById("scanner-link").href = "https://aakhirainvestments.github.io/NightOfSeeking/index.html?gender=" + GENDER;
+  document.getElementById("event-title").innerText = GENDER === "MALE" ? "Brothers Itikaaf — Volunteer Hub" : "Sisters Itikaaf — Volunteer Hub";
+
+  var ME = JSON.parse(localStorage.getItem("vol_" + GENDER) || "null");
+  var blocksData = [];
+  var volunteersData = [];
+  var currentFilter = "all";
+  var adminModeOn = false;
+  var editContext = null;
+
+  if (ME) showVolunteerView();
+
+  // ---- ADMIN TOGGLE ----
+  function toggleAdminMode() {
+    adminModeOn = !adminModeOn;
+    document.body.classList.toggle("admin-mode", adminModeOn);
+    var btn = document.getElementById("admin-toggle");
+    btn.classList.toggle("on", adminModeOn);
+    btn.innerText = "Admin Mode: " + (adminModeOn ? "On" : "Off");
+  }
+
+  // ---- TABS ----
+  function switchTab(tab) {
+    var names = ["schedule", "signup", "admin"];
+    document.querySelectorAll(".tab").forEach(function(t) { t.classList.remove("active"); });
+    document.querySelectorAll(".tab-content").forEach(function(t) { t.classList.remove("active"); });
+    names.forEach(function(name, i) {
+      if (name === tab) {
+        document.querySelectorAll(".tab")[i].classList.add("active");
+        document.getElementById("tab-" + name).classList.add("active");
+      }
+    });
+    if (tab === "admin") loadVolunteers();
+  }
+
+  // ---- SIGN UP ----
+  function signUp() {
+    var name = document.getElementById("vol-name").value.trim();
+    var email = document.getElementById("vol-email").value.trim();
+    var phone = document.getElementById("vol-phone").value.trim();
+    var feedback = document.getElementById("signup-feedback");
+    var btn = document.getElementById("signup-btn");
+    if (!name) { feedback.innerText = "Please enter your name"; return; }
+    if (!email) { feedback.innerText = "Please enter your email"; return; }
+    btn.disabled = true; feedback.innerText = "Signing up...";
+    fetch(WEB_APP_URL + "?action=signUpVolunteer&name=" + encodeURIComponent(name) + "&email=" + encodeURIComponent(email) + "&phone=" + encodeURIComponent(phone) + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success || data.existing) {
+          ME = { id: data.id, name: data.name || name };
+          localStorage.setItem("vol_" + GENDER, JSON.stringify(ME));
+          feedback.innerText = data.existing ? "Welcome back, " + ME.name + "!" : "You're signed up! Check your email 🌙";
+          setTimeout(showVolunteerView, 800);
+        } else { feedback.innerText = data.error || "Something went wrong"; btn.disabled = false; }
+      })
+      .catch(function() { feedback.innerText = "Could not sign up. Check connection."; btn.disabled = false; });
+  }
+
+  function showVolunteerView() {
+    if (!ME) return;
+    document.getElementById("signup-view").style.display = "none";
+    document.getElementById("volunteer-view").style.display = "block";
+    document.getElementById("vol-display-name").innerText = ME.name;
+    document.getElementById("vol-display-id").innerText = "ID: " + ME.id;
+  }
+
+  function emailMyTasks() {
+    if (!ME) return;
+    var feedback = document.getElementById("email-feedback");
+    feedback.innerText = "Sending...";
+    fetch(WEB_APP_URL + "?action=emailVolunteer&vid=" + ME.id + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) { feedback.innerText = data.success ? "Sent! جزاك الله خيرا 🤍" : (data.error || "Error"); })
+      .catch(function() { feedback.innerText = "Could not send."; });
+  }
+
+  // ---- LOAD TASKS ----
+  function loadTasks() {
+    fetch(WEB_APP_URL + "?action=getTasks&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        blocksData = data.blocks || [];
+        renderSchedule();
+        document.getElementById("last-updated").innerText =
+          "Updated " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      })
+      .catch(function() {
+        document.getElementById("schedule-container").innerHTML = '<div class="loading">Could not load. Check connection.</div>';
+      });
+  }
+
+  function setFilter(f) {
+    currentFilter = f;
+    document.querySelectorAll(".filter-btn").forEach(function(b) { b.classList.remove("active"); });
+    document.getElementById("filter-" + f).classList.add("active");
+    renderSchedule();
+  }
+
+  function renderSchedule() {
+    var container = document.getElementById("schedule-container");
+    if (blocksData.length === 0) {
+      container.innerHTML = '<div class="empty">No schedule yet — add blocks in Admin 🌙</div>';
+      return;
+    }
+
+    var activeBlocks = [];
+    var completedBlocks = [];
+    blocksData.forEach(function(block) {
+      var allDone = block.tasks.length > 0 && block.tasks.every(function(t) { return t.completed; });
+      (allDone ? completedBlocks : activeBlocks).push(block);
+    });
+
+    var html = "";
+
+    function passesFilter(tasks) {
+      return tasks.filter(function(t) {
+        if (currentFilter === "mine") return ME && iClaimed(t);
+        if (currentFilter === "open") return t.claimedCount < t.maxClaimers;
+        return true;
+      });
+    }
+
+    activeBlocks.forEach(function(block, bi) {
+      var visible = passesFilter(block.tasks);
+      if (currentFilter !== "all" && visible.length === 0) return;
+      html += renderBlock(block, bi, false);
+    });
+
+    if (currentFilter === "all" && completedBlocks.length > 0) {
+      html += '<p class="section-label">✓ Completed Blocks</p>';
+      completedBlocks.forEach(function(block, bi) { html += renderBlock(block, "c" + bi, true); });
+    }
+
+    if (!html) {
+      html = currentFilter === "mine"
+        ? '<div class="empty">No tasks claimed yet — browse All Tasks 🌙</div>'
+        : '<div class="empty">No unclaimed tasks remaining</div>';
+    }
+
+    container.innerHTML = html;
+  }
+
+  function iClaimed(task) {
+    if (!ME) return false;
+    var ids = (task.claimedIds || "").split(",").map(function(s) { return s.trim(); });
+    var names = (task.claimedNames || "").split(",").map(function(s) { return s.trim().toLowerCase(); });
+    return ids.indexOf(ME.id) !== -1 || names.indexOf(ME.name.toLowerCase()) !== -1;
+  }
+
+  function renderBlock(block, bi, isCompleted) {
+    var done = block.tasks.filter(function(t) { return t.completed; }).length;
+    var timeRange = block.blockStart + (block.blockEnd ? " – " + block.blockEnd : "");
+
+    var adminBtns = '<div class="block-admin-btns">'
+      + '<button class="icon-btn" onclick="event.stopPropagation();moveBlock(\'' + esc(block.blockName) + '\',\'' + esc(block.blockStart) + '\',\'' + esc(block.blockEnd) + '\',-1)">↑</button>'
+      + '<button class="icon-btn" onclick="event.stopPropagation();moveBlock(\'' + esc(block.blockName) + '\',\'' + esc(block.blockStart) + '\',\'' + esc(block.blockEnd) + '\',1)">↓</button>'
+      + '<button class="icon-btn" onclick="event.stopPropagation();openEditBlock(\'' + esc(block.blockName) + '\',\'' + esc(block.blockStart) + '\',\'' + esc(block.blockEnd) + '\')">✏️</button>'
+      + '<button class="icon-btn danger" onclick="event.stopPropagation();deleteBlock(\'' + esc(block.blockName) + '\',\'' + esc(block.blockStart) + '\',\'' + esc(block.blockEnd) + '\')">🗑</button>'
+      + '</div>';
+
+    var html = '<div class="block' + (isCompleted ? " completed-block" : "") + '" id="block-' + bi + '">'
+      + '<div class="block-header" onclick="toggleBlock(\'block-' + bi + '\')">'
+      + '<span class="block-time-range">' + escapeHtml(timeRange) + '</span>'
+      + '<span class="block-name">' + escapeHtml(block.blockName) + '</span>'
+      + '<span class="block-count">' + done + '/' + block.tasks.length + '</span>'
+      + adminBtns
+      + '<span class="block-chevron">▾</span>'
+      + '</div>'
+      + '<div class="block-tasks">';
+
+    // Filter tasks for display
+    var displayTasks = currentFilter === "all" ? block.tasks : block.tasks.filter(function(t) {
+      if (currentFilter === "mine") return iClaimed(t);
+      if (currentFilter === "open") return t.claimedCount < t.maxClaimers;
+      return true;
+    });
+
+    displayTasks.forEach(function(t) {
+      var mine = iClaimed(t);
+      var isFull = t.claimedCount >= t.maxClaimers;
+      var rowCls = "task-row" + (t.completed ? " completed-task" : "") + (mine ? " i-claimed" : "");
+
+      // Claimer chips
+      var claimerChips = "";
+      if (t.claimedNames) {
+        var names = t.claimedNames.split(",").map(function(s) { return s.trim(); }).filter(Boolean);
+        names.forEach(function(n) {
+          var isMe = ME && n.toLowerCase() === ME.name.toLowerCase();
+          claimerChips += '<span class="claimer-chip' + (isMe ? " is-me" : "") + '">' + escapeHtml(isMe ? "You" : n) + '</span>';
+        });
+      }
+
+      // Spots text
+      var spotsText = t.claimedCount + "/" + t.maxClaimers;
+      var spotsCls = "task-spots" + (isFull ? " full" : (mine ? " mine" : ""));
+
+      // Claim button
+      var claimBtn = "";
+      if (mine) {
+        claimBtn = '<button class="task-claim-btn claimed-by-me">✓ Claimed</button>'
+          + '<button class="task-claim-btn unclaim" onclick="unclaimTask(\'' + t.id + '\')">Unclaim</button>';
+      } else if (!isFull) {
+        claimBtn = '<button class="task-claim-btn open" onclick="claimTask(\'' + t.id + '\')">Claim (' + (t.maxClaimers - t.claimedCount) + ' left)</button>';
+      } else {
+        claimBtn = '<button class="task-claim-btn full-btn" disabled>Full (' + t.maxClaimers + '/' + t.maxClaimers + ')</button>';
+      }
+
+      var taskAdminBtns = '<div class="task-admin-btns">'
+        + '<button class="icon-btn" onclick="openEditTask(\'' + t.id + '\',\'' + esc(t.taskName) + '\',\'' + esc(t.taskTime || "") + '\',' + t.maxClaimers + ')">✏️</button>'
+        + '<button class="icon-btn danger" onclick="deleteTask(\'' + t.id + '\')">🗑</button>'
+        + '</div>';
+
+      html += '<div class="' + rowCls + '">'
+        + '<div class="task-check" onclick="toggleComplete(\'' + t.id + '\')">' + (t.completed ? "✓" : "") + '</div>'
+        + '<div class="task-info">'
+        + '<p class="task-name">' + escapeHtml(t.taskName) + '</p>'
+        + (t.taskTime ? '<span class="task-time-badge">⏰ ' + escapeHtml(t.taskTime) + '</span>' : '')
+        + '<div class="task-claimers-row">'
+        + '<span class="' + spotsCls + '">' + spotsText + ' volunteers</span>'
+        + claimerChips
+        + '</div>'
+        + '</div>'
+        + '<div class="task-actions">' + claimBtn + taskAdminBtns + '</div>'
+        + '</div>';
+    });
+
+    // Inline add task
+    html += '<div class="add-task-row">'
+      + '<input type="text" placeholder="+ Add task..." id="newtask-' + bi + '" onkeydown="if(event.key===\'Enter\') addTaskToBlock(\'' + esc(block.blockName) + '\',\'' + esc(block.blockStart) + '\',\'' + esc(block.blockEnd) + '\',' + JSON.stringify(String(bi)) + ')">'
+      + '<button onclick="addTaskToBlock(\'' + esc(block.blockName) + '\',\'' + esc(block.blockStart) + '\',\'' + esc(block.blockEnd) + '\',' + JSON.stringify(String(bi)) + ')">Add</button>'
+      + '</div>';
+
+    html += '</div></div>';
+    return html;
+  }
+
+  function toggleBlock(id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.toggle("collapsed");
+  }
+
+  // ---- CLAIM / UNCLAIM / COMPLETE ----
+  function claimTask(taskId) {
+    if (!ME) { alert("Please sign up as a volunteer first!"); switchTab("signup"); return; }
+    fetch(WEB_APP_URL + "?action=claimTask&taskId=" + taskId + "&name=" + encodeURIComponent(ME.name) + "&vid=" + ME.id + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) { if (data.success) loadTasks(); else alert(data.error || "Could not claim"); });
+  }
+
+  function unclaimTask(taskId) {
+    if (!ME) return;
+    fetch(WEB_APP_URL + "?action=unclaimTask&taskId=" + taskId + "&name=" + encodeURIComponent(ME.name) + "&vid=" + ME.id + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) { if (data.success) loadTasks(); });
+  }
+
+  function toggleComplete(taskId) {
+    fetch(WEB_APP_URL + "?action=completeTask&taskId=" + taskId + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) { if (data.success) loadTasks(); });
+  }
+
+  // ---- MOVE BLOCK ----
+  function moveBlock(blockName, blockStart, blockEnd, direction) {
+    fetch(WEB_APP_URL + "?action=moveBlock&blockName=" + encodeURIComponent(blockName) + "&blockStart=" + encodeURIComponent(blockStart) + "&blockEnd=" + encodeURIComponent(blockEnd) + "&direction=" + direction + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) { if (data.success) loadTasks(); });
+  }
+
+  // ---- EDIT / DELETE ----
+  function openEditBlock(blockName, blockStart, blockEnd) {
+    editContext = { type: "block", blockName: blockName, blockStart: blockStart, blockEnd: blockEnd };
+    document.getElementById("edit-modal-title").innerText = "Edit Block";
+    document.getElementById("edit-label-1").innerText = "Block Name";
+    document.getElementById("edit-input-1").value = blockName;
+    document.getElementById("edit-extra-fields").innerHTML =
+      '<div class="field"><label>Start Time</label><input type="text" id="edit-start" value="' + escapeHtml(blockStart) + '"></div>'
+      + '<div class="field"><label>End Time</label><input type="text" id="edit-end" value="' + escapeHtml(blockEnd) + '"></div>';
+    document.getElementById("edit-feedback").innerText = "";
+    document.getElementById("edit-save-btn").disabled = false;
+    document.getElementById("edit-modal").classList.add("open");
+  }
+
+  function openEditTask(taskId, taskName, taskTime, maxClaimers) {
+    editContext = { type: "task", taskId: taskId };
+    document.getElementById("edit-modal-title").innerText = "Edit Task";
+    document.getElementById("edit-label-1").innerText = "Task Name";
+    document.getElementById("edit-input-1").value = taskName;
+    document.getElementById("edit-extra-fields").innerHTML =
+      '<div class="field"><label>Time Slot (optional)</label><input type="text" id="edit-task-time" value="' + escapeHtml(taskTime) + '" placeholder="e.g. 22:15"></div>'
+      + '<div class="field"><label>Max Volunteers</label><input type="number" id="edit-max" value="' + maxClaimers + '" min="1"></div>';
+    document.getElementById("edit-feedback").innerText = "";
+    document.getElementById("edit-save-btn").disabled = false;
+    document.getElementById("edit-modal").classList.add("open");
+  }
+
+  function saveEdit() {
+    var val1 = document.getElementById("edit-input-1").value.trim();
+    var feedback = document.getElementById("edit-feedback");
+    var btn = document.getElementById("edit-save-btn");
+    if (!val1) { feedback.innerText = "Name cannot be empty"; return; }
+    btn.disabled = true; feedback.innerText = "Saving...";
+
+    var url;
+    if (editContext.type === "block") {
+      var newStart = document.getElementById("edit-start").value.trim();
+      var newEnd = document.getElementById("edit-end").value.trim();
+      url = WEB_APP_URL + "?action=editBlock&blockName=" + encodeURIComponent(editContext.blockName) + "&blockStart=" + encodeURIComponent(editContext.blockStart) + "&blockEnd=" + encodeURIComponent(editContext.blockEnd) + "&newBlockName=" + encodeURIComponent(val1) + "&newBlockStart=" + encodeURIComponent(newStart) + "&newBlockEnd=" + encodeURIComponent(newEnd) + "&gender=" + GENDER;
+    } else {
+      var tTime = document.getElementById("edit-task-time").value.trim();
+      var tMax = document.getElementById("edit-max").value.trim();
+      url = WEB_APP_URL + "?action=editTask&taskId=" + editContext.taskId + "&newName=" + encodeURIComponent(val1) + "&newTaskTime=" + encodeURIComponent(tTime) + "&newMax=" + encodeURIComponent(tMax) + "&gender=" + GENDER;
+    }
+
+    fetch(url).then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) { closeAllModals(); loadTasks(); }
+        else { feedback.innerText = data.error || "Error"; btn.disabled = false; }
+      })
+      .catch(function() { feedback.innerText = "Connection error"; btn.disabled = false; });
+  }
+
+  function deleteTask(taskId) {
+    if (!confirm("Delete this task?")) return;
+    fetch(WEB_APP_URL + "?action=deleteTask&taskId=" + taskId + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) { if (data.success) loadTasks(); });
+  }
+
+  function deleteBlock(blockName, blockStart, blockEnd) {
+    if (!confirm("Delete block '" + blockName + "' and all its tasks?")) return;
+    fetch(WEB_APP_URL + "?action=deleteBlock&blockName=" + encodeURIComponent(blockName) + "&blockStart=" + encodeURIComponent(blockStart) + "&blockEnd=" + encodeURIComponent(blockEnd) + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) { if (data.success) loadTasks(); });
+  }
+
+  // ---- ADD BLOCK ----
+  function addTaskInput() {
+    var container = document.getElementById("task-inputs");
+    var count = container.children.length + 1;
+    var row = document.createElement("div");
+    row.className = "task-builder-row";
+    row.innerHTML = '<div class="task-builder-row-header"><span>Task ' + count + '</span><button class="remove-task-btn" onclick="this.closest(\'.task-builder-row\').remove()">×</button></div>'
+      + '<div class="task-builder-fields">'
+      + '<input type="text" class="task-name-input task-input" placeholder="Task description...">'
+      + '<input type="text" class="task-time-input task-time" placeholder="e.g. 22:15">'
+      + '<input type="number" class="task-max-input task-max" placeholder="1" min="1" value="1">'
+      + '</div>';
+    container.appendChild(row);
+    row.querySelector("input").focus();
+  }
+
+  function saveBlock() {
+    var name = document.getElementById("new-block-name").value.trim();
+    var start = document.getElementById("new-block-start").value.trim();
+    var end = document.getElementById("new-block-end").value.trim();
+    var feedback = document.getElementById("add-feedback");
+    var btn = document.getElementById("save-block-btn");
+
+    if (!name || !start) { feedback.innerText = "Please enter block name and start time"; return; }
+
+    var tasks = [];
+    document.querySelectorAll("#task-inputs .task-builder-row").forEach(function(row) {
+      var taskName = row.querySelector(".task-input").value.trim();
+      var taskTime = row.querySelector(".task-time").value.trim();
+      var maxPeople = parseInt(row.querySelector(".task-max").value) || 1;
+      if (taskName) tasks.push({ name: taskName, time: taskTime, max: maxPeople });
+    });
+
+    if (tasks.length === 0) { feedback.innerText = "Please add at least one task"; return; }
+
+    btn.disabled = true; feedback.innerText = "Saving...";
+    var index = 0;
+
+    function sendNext() {
+      if (index >= tasks.length) {
+        feedback.innerText = "Saved " + tasks.length + " task" + (tasks.length > 1 ? "s" : "") + "!";
+        btn.disabled = false;
+        document.getElementById("new-block-name").value = "";
+        document.getElementById("new-block-start").value = "";
+        document.getElementById("new-block-end").value = "";
+        document.getElementById("task-inputs").innerHTML = '<div class="task-builder-row"><div class="task-builder-row-header"><span>Task 1</span></div><div class="task-builder-fields"><input type="text" class="task-name-input task-input" placeholder="e.g. Set up archery range"><input type="text" class="task-time-input task-time" placeholder="e.g. 22:15"><input type="number" class="task-max-input task-max" placeholder="1" min="1" value="1"></div></div>';
+        loadTasks();
+        setTimeout(function() { switchTab("schedule"); }, 800);
+        return;
+      }
+      var t = tasks[index];
+      fetch(WEB_APP_URL + "?action=addTask&blockName=" + encodeURIComponent(name) + "&blockStart=" + encodeURIComponent(start) + "&blockEnd=" + encodeURIComponent(end) + "&taskName=" + encodeURIComponent(t.name) + "&taskTime=" + encodeURIComponent(t.time) + "&maxClaimers=" + t.max + "&gender=" + GENDER)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success) { index++; sendNext(); }
+          else { feedback.innerText = "Error on task " + (index + 1); btn.disabled = false; }
+        })
+        .catch(function() { feedback.innerText = "Connection error on task " + (index + 1); btn.disabled = false; });
+    }
+    sendNext();
+  }
+
+  function addTaskToBlock(blockName, blockStart, blockEnd, bi) {
+    var input = document.getElementById("newtask-" + bi);
+    if (!input) return;
+    var taskName = input.value.trim();
+    if (!taskName) return;
+    fetch(WEB_APP_URL + "?action=addTask&blockName=" + encodeURIComponent(blockName) + "&blockStart=" + encodeURIComponent(blockStart) + "&blockEnd=" + encodeURIComponent(blockEnd) + "&taskName=" + encodeURIComponent(taskName) + "&taskTime=&maxClaimers=1&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) { if (data.success) { input.value = ""; loadTasks(); } });
+  }
+
+  // ---- ADMIN ----
+  function loadVolunteers() {
+    fetch(WEB_APP_URL + "?action=getVolunteers&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) { volunteersData = data.volunteers || []; renderVolunteers(); });
+  }
+
+  function renderVolunteers() {
+    var container = document.getElementById("vol-list-container");
+    if (volunteersData.length === 0) { container.innerHTML = '<div class="empty">No volunteers yet</div>'; return; }
+    var html = '<div class="vol-list">';
+    volunteersData.forEach(function(v) {
+      html += '<div class="vol-row"><div><p class="vol-row-name">' + escapeHtml(v.name) + '</p><p class="vol-row-email">' + escapeHtml(v.email) + '</p></div>'
+        + '<button class="vol-email-btn" onclick="emailOne(\'' + v.id + '\')">📧 Email</button></div>';
+    });
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
+  function emailOne(vid) {
+    fetch(WEB_APP_URL + "?action=emailVolunteer&vid=" + vid + "&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) { alert(data.success ? "Email sent!" : (data.error || "Error")); });
+  }
+
+  function emailAll() {
+    if (!confirm("Send task list emails to all volunteers?")) return;
+    fetch(WEB_APP_URL + "?action=emailAllVolunteers&gender=" + GENDER)
+      .then(function(r) { return r.json(); })
+      .then(function(data) { alert(data.success ? "Sent to " + data.count + " volunteers!" : "Error"); });
+  }
+
+  function closeModal(e) { if (e.target === e.currentTarget) closeAllModals(); }
+  function closeAllModals() {
+    document.querySelectorAll(".modal-overlay").forEach(function(m) { m.classList.remove("open"); });
+    editContext = null;
+  }
+
+  function escapeHtml(s) { return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
+  function esc(s) { return String(s || "").replace(/\\/g,"\\\\").replace(/'/g,"\\'"); }
+
+  loadTasks();
+  setInterval(loadTasks, 60000);
+</script>
+</body>
+</html>
