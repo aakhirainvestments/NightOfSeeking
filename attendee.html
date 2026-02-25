@@ -226,6 +226,13 @@
           </div>
         </div>
 
+        <!-- KHATAM LINK — always visible so unclaimed attendees can go claim -->
+        <div id="khatam-link-row" style="border-top:1px solid var(--border);display:none;">
+          <div class="card-inner" style="padding-top:14px;padding-bottom:14px;">
+            <a class="link-btn" id="khatam-page-link" href="#" target="_blank">📖 View Khatam &amp; Claim Your Juz →</a>
+          </div>
+        </div>
+
         <!-- Q&A — inside the card -->
         <div style="border-top:1px solid var(--border);">
           <div class="card-inner">
@@ -314,6 +321,7 @@
   document.getElementById("prog-date-label").innerText = isFemale ? "14 March 2026" : "7 March 2026";
   document.getElementById("qna-link").href = BASE + "qna.html?gender=" + GENDER;
   document.getElementById("khatam-full-link").href = BASE + "khatam.html?gender=" + GENDER;
+  document.getElementById("khatam-page-link").href  = BASE + "khatam.html?gender=" + GENDER;
 
   var ATTENDEE = null;
 
@@ -377,6 +385,7 @@
     loadProgramme();
     renderMyNight();
     renderKhatam();
+    document.getElementById("khatam-link-row").style.display = "block";
   }
 
   // ---- PROGRAMME (from sheet) ----
