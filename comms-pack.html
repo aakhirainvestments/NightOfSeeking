@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Night of Seeking — Comms Pack</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1a10; --bg2: #162018; --card: #1a2a1c;
+    --accent: #c9b99a; --accent2: #e8d9c0;
+    --border: rgba(201,185,154,0.2); --border2: rgba(201,185,154,0.1);
+    --text: #f0ebe0; --muted: #7a9a7a; --muted2: #4a6a4a;
+  }
+  body.female {
+    --bg: #faf6f0; --bg2: #f3ede4; --card: #ffffff;
+    --accent: #6b1a2a; --accent2: #9c3a4a;
+    --border: rgba(107,26,42,0.15); --border2: rgba(107,26,42,0.07);
+    --text: #1a1a1a; --muted: #999; --muted2: #bbb;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Montserrat, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.3s, color 0.3s; }
+
+  .top-bar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .top-bar-title { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); }
+  .gender-toggle { display: flex; gap: 8px; }
+  .toggle-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-family: Montserrat, sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 1px;
+    transition: all 0.2s;
+  }
+  .toggle-btn.active { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+
+  .content { max-width: 720px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  .page-header { margin-bottom: 40px; }
+  .page-header h1 { font-family: "Cormorant Garamond", serif; font-size: 36px; font-weight: 300; color: var(--text); margin-bottom: 6px; }
+  .page-header h1 em { font-style: italic; color: var(--accent); }
+  .page-header p { font-size: 12px; color: var(--muted); letter-spacing: 1px; }
+
+  .msg-group { margin-bottom: 48px; }
+  .msg-group-label {
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .msg-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+
+  .msg-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border2);
+    background: var(--bg2);
+  }
+
+  .msg-num {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .msg-tag {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    padding: 3px 8px;
+    border-radius: 1px;
+  }
+
+  .msg-timing {
+    font-size: 10px;
+    color: var(--muted2);
+    letter-spacing: 1px;
+  }
+
+  .msg-body {
+    padding: 18px 20px;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.8;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .placeholder {
+    background: var(--accent);
+    color: var(--bg);
+    padding: 1px 6px;
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .msg-footer {
+    padding: 10px 20px 14px;
+    border-top: 1px solid var(--border2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .msg-note {
+    font-size: 11px;
+    color: var(--muted2);
+    font-style: italic;
+    flex: 1;
+  }
+
+  .copy-btn {
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--accent);
+    font-family: Montserrat, sans-serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 1px;
+    transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover { background: var(--accent); color: var(--bg); }
+  .copy-btn.copied { background: var(--muted2); border-color: var(--muted2); color: var(--bg); }
+</style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <span class="top-bar-title">Night of Seeking — Comms Pack</span>
+    <div class="gender-toggle">
+      <button class="toggle-btn active" id="btn-male" onclick="setGender('male')">Brothers</button>
+      <button class="toggle-btn" id="btn-female" onclick="setGender('female')">Sisters</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="page-header">
+      <h1>Group Chat <em>Messages</em></h1>
+      <p id="gender-sub">Brothers Itikaaf · 7 March 2026 · Copy & paste into WhatsApp</p>
+    </div>
+
+    <div id="messages-container"></div>
+  </div>
+
+<script>
+var REGISTER_LINK_M = "[REGISTRATION LINK — MALE]";
+var REGISTER_LINK_F = "[REGISTRATION LINK — FEMALE]";
+var PREORDER_LINK_M = "[PREORDER LINK — MALE]";
+var PREORDER_LINK_F = "[PREORDER LINK — FEMALE]";
+var QNA_LINK_M = "https://aakhirainvestments.github.io/NightOfSeeking/qna.html?gender=MALE";
+var QNA_LINK_F = "https://aakhirainvestments.github.io/NightOfSeeking/qna.html?gender=FEMALE";
+var KHATAM_LINK_M = "https://aakhirainvestments.github.io/NightOfSeeking/khatam.html?gender=MALE";
+var KHATAM_LINK_F = "https://aakhirainvestments.github.io/NightOfSeeking/khatam.html?gender=FEMALE";
+var PORTAL_LINK_M = "https://aakhirainvestments.github.io/NightOfSeeking/attendee.html?gender=MALE";
+var PORTAL_LINK_F = "https://aakhirainvestments.github.io/NightOfSeeking/attendee.html?gender=FEMALE";
+
+var MESSAGES = {
+  male: [
+    {
+      num: "01",
+      tag: "Save the Date",
+      timing: "Send now / as soon as group is live",
+      note: "First message — gets the date in their calendar",
+      body:
+`بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+
+Assalamu Alaykum Brothers 🌙
+
+*Night of Seeking — Itikaaf Night* is coming.
+
+📅 *[DAY] [DATE] March 2026*
+⏰ *After Taraweeh — from 10:30pm*
+📍 *Masjidu Raheem, Elfindale*
+
+A night of Quran, Salah, Dhikr, Archery, Q&A and Sahoor together.
+
+Registration opens soon. Save the date.`
+    },
+    {
+      num: "02",
+      tag: "Registration Open",
+      timing: "When form goes live",
+      note: "Replace placeholder with the actual registration link",
+      body:
+`Assalamu Alaykum Brothers 🌙
+
+*Registration for Night of Seeking is now open.*
+
+Spots are limited to 130 — once it's full, it's full.
+
+📋 Register here:
+${REGISTER_LINK_M}
+
+When you register you can also:
+📖 Opt in to the community Khatam
+🏹 Sign up for Archery
+🤼 Sign up for Wrestling (PFA)
+❓ Submit a question for the speaker
+
+We look forward to seeing you there. 🤍`
+    },
+    {
+      num: "03",
+      tag: "Programme",
+      timing: "A few days after registration opens",
+      note: "Attach the programme PDF to this message",
+      body:
+`*Night of Seeking — Programme* 🌙
+
+Here's what the night looks like:
+
+🕥 *10:30pm* — Registration
+📜 *11:00pm* — Introduction & House Rules
+⚡ *11:30pm* — Choice Activity
+   🏹 Archery · 🤼 Wrestling · 📖 Quran Khatam
+💬 *1:00am* — Talk + Q&A with Mln Zakariyya Harnekar
+📿 *2:15am* — Khatam Completion & Dhikr (Yusha Toffar)
+🕌 *3:35am* — Tasbīh Salah (Mujaahid De Vries)
+🍽️ *3:50am* — Sahoor
+🌅 *5:28am* — Fajr & Duʿā
+
+Full programme attached 👆
+
+Register if you haven't already:
+${REGISTER_LINK_M}`
+    },
+    {
+      num: "04",
+      tag: "Pre-orders",
+      timing: "After programme announcement, before night",
+      note: "Replace pre-order link placeholder",
+      body:
+`*Pre-orders are open for Night of Seeking* 🌙
+
+Don't wait until the night — order your food in advance and have it ready for Sahoor.
+
+🛒 Pre-order here:
+${PREORDER_LINK_M}
+
+Vendors will also be on site throughout the night.
+
+Not registered yet?
+📋 ${REGISTER_LINK_M}`
+    },
+    {
+      num: "05",
+      tag: "Q&A",
+      timing: "A few days before the night",
+      note: "",
+      body:
+`*Got a question for Mln Zakariyya Harnekar?* ❓
+
+The Q&A is one of the most valuable parts of the night — and the best questions come from you.
+
+Submit your question anonymously (or with your name) and upvote questions from others. The most popular ones get answered on the night.
+
+🗣️ Submit or upvote here:
+${QNA_LINK_M}
+
+See what everyone is asking. Add yours. 🌙`
+    },
+    {
+      num: "06",
+      tag: "Khatam",
+      timing: "A few days before / same time as Q&A",
+      note: "",
+      body:
+`*Complete the Quran together — in one night.* 📖
+
+We're doing a community Khatam on the night of Seeking. Each person claims a juz, recites it — either before the night, on the night, or both — and together we complete the entire Quran.
+
+Select your juz here:
+${KHATAM_LINK_M}
+
+*"Whoever recites a letter from the Book of Allah will have a reward, and that reward will be multiplied by ten."*
+— Tirmidhi
+
+Don't leave your juz unclaimed. 🌙`
+    },
+    {
+      num: "07",
+      tag: "Day Of",
+      timing: "Morning of 7 March (or the evening)",
+      note: "",
+      body:
+`*Tonight is the Night of Seeking.* 🌙
+
+We'll see you at Masjidu Raheem after Taraweeh — doors from *10:30pm*.
+
+Before you come, access your personal portal for your full programme, activity details, khatam juz and more:
+
+🔗 ${PORTAL_LINK_M}
+
+Sign in with the email you registered with.
+
+Make your niyyah. Tonight is yours. 🤍`
+    }
+  ],
+
+  female: [
+    {
+      num: "01",
+      tag: "Save the Date",
+      timing: "Send now / as soon as group is live",
+      note: "First message — gets the date in their calendar",
+      body:
+`بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+
+Assalamu Alaykum Sisters 🌙
+
+*Night of Seeking — Itikaaf Night* is coming.
+
+📅 *[DAY] [DATE] March 2026*
+⏰ *After Taraweeh — from 10:30pm*
+📍 *Masjidu Raheem, Elfindale*
+
+A night of Quran, Salah, Dhikr, Archery, Q&A and Sahoor together.
+
+Registration opens soon. Save the date. 🤍`
+    },
+    {
+      num: "02",
+      tag: "Registration Open",
+      timing: "When form goes live",
+      note: "Replace placeholder with the actual registration link",
+      body:
+`Assalamu Alaykum Sisters 🌙
+
+*Registration for Night of Seeking is now open.*
+
+Spots are limited to 130 — once it's full, it's full.
+
+📋 Register here:
+${REGISTER_LINK_F}
+
+When you register you can also:
+📖 Opt in to the community Khatam
+🏹 Sign up for Archery
+🥊 Sign up for MMA / Self Defence
+❓ Submit a question for the speaker
+
+We look forward to seeing you there. 🤍`
+    },
+    {
+      num: "03",
+      tag: "Programme",
+      timing: "A few days after registration opens",
+      note: "Attach the programme PDF to this message",
+      body:
+`*Night of Seeking — Programme* 🌙
+
+Here's what the night looks like:
+
+🕥 *10:30pm* — Registration
+📜 *11:00pm* — Introduction & House Rules (MC: Aleeza)
+📿 *11:15pm* — Dhikr (Noor Al Sabah · Aasiyah)
+⚡ *12:00am* — Choice Activity
+   🏹 Archery · 🥊 MMA / Self Defence · 📖 Quran Circle & Khatam
+💬 *1:30am* — Talk + Q&A with Fatima Al Talib
+🕌 *2:30am* — Tasbīh · Salah · Witr · Khatam & Duʿā
+   Yusra De Vries · Thaakirah Isaacs
+🍽️ *4:00am* — Sahoor
+✨ *4:55am* — Ending Strong (Ml Rukkaya)
+🌅 *5:28am* — Fajr & Duʿā
+
+Full programme attached 👆
+
+Register if you haven't already:
+${REGISTER_LINK_F}`
+    },
+    {
+      num: "04",
+      tag: "Pre-orders",
+      timing: "After programme announcement, before night",
+      note: "Replace pre-order link placeholder",
+      body:
+`*Pre-orders are open for Night of Seeking* 🌙
+
+Order your food in advance and have it ready for Sahoor — no queuing on the night.
+
+🛒 Pre-order here:
+${PREORDER_LINK_F}
+
+Vendors will also be on site throughout the night.
+
+Not registered yet?
+📋 ${REGISTER_LINK_F}`
+    },
+    {
+      num: "05",
+      tag: "Q&A",
+      timing: "A few days before the night",
+      note: "",
+      body:
+`*Got a question for Fatima Al Talib?* ❓
+
+Submit your question before the night — anonymously or with your name — and upvote the questions you want answered. The most popular ones get answered on the night.
+
+🗣️ Submit or upvote here:
+${QNA_LINK_F}
+
+See what everyone is asking. Add yours. 🌙`
+    },
+    {
+      num: "06",
+      tag: "Khatam",
+      timing: "A few days before / same time as Q&A",
+      note: "",
+      body:
+`*Complete the Quran together — in one night.* 📖
+
+We're doing a community Khatam on the Night of Seeking. Each person claims a juz, recites it — before the night, on the night, or both — and together we complete the entire Quran in one blessed evening.
+
+Select your juz here:
+${KHATAM_LINK_F}
+
+*"Whoever recites a letter from the Book of Allah will have a reward, and that reward will be multiplied by ten."*
+— Tirmidhi
+
+Don't leave your juz unclaimed. 🌙`
+    },
+    {
+      num: "07",
+      tag: "Day Of",
+      timing: "Morning of 14 March (or the evening)",
+      note: "",
+      body:
+`*Tonight is the Night of Seeking.* 🌙
+
+We'll see you at Masjidu Raheem after Taraweeh — doors from *10:30pm*.
+
+Before you come, access your personal portal for your full programme, activity details, khatam juz and more:
+
+🔗 ${PORTAL_LINK_F}
+
+Sign in with the email you registered with.
+
+Make your niyyah. Tonight is yours. 🤍`
+    }
+  ]
+};
+
+var currentGender = 'male';
+
+function setGender(g) {
+  currentGender = g;
+  var isFemale = g === 'female';
+  document.body.classList.toggle('female', isFemale);
+  document.getElementById('btn-male').classList.toggle('active', !isFemale);
+  document.getElementById('btn-female').classList.toggle('active', isFemale);
+  document.getElementById('gender-sub').textContent = isFemale
+    ? "Sisters Itikaaf · 14 March 2026 · Copy & paste into WhatsApp"
+    : "Brothers Itikaaf · 7 March 2026 · Copy & paste into WhatsApp";
+  renderMessages(MESSAGES[g]);
+}
+
+function renderMessages(msgs) {
+  var container = document.getElementById('messages-container');
+  var html = '<div class="msg-group"><div class="msg-group-label">WhatsApp Group Messages — In Order</div>';
+
+  msgs.forEach(function(msg) {
+    var bodyHtml = msg.body
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\[([^\]]+)\]/g, '<span class="placeholder">[$1]</span>');
+
+    html += '<div class="msg-card">';
+    html += '<div class="msg-header">';
+    html += '<span class="msg-num">Message ' + msg.num + '</span>';
+    html += '<span class="msg-tag">' + msg.tag + '</span>';
+    html += '<span class="msg-timing">' + msg.timing + '</span>';
+    html += '</div>';
+    html += '<div class="msg-body">' + bodyHtml + '</div>';
+    html += '<div class="msg-footer">';
+    html += '<span class="msg-note">' + (msg.note ? '📎 ' + msg.note : '') + '</span>';
+    html += '<button class="copy-btn" onclick="copyMsg(this, ' + JSON.stringify(msg.body) + ')">Copy →</button>';
+    html += '</div>';
+    html += '</div>';
+  });
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function copyMsg(btn, text) {
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = 'Copied ✓';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'Copy →';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+setGender('male');
+</script>
+</body>
+</html>
