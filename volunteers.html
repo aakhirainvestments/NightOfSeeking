@@ -737,15 +737,37 @@
     sendNext();
   }
 
-  function addTaskToBlock(blockName, blockStart, blockEnd, bi) {
-    var input = document.getElementById("newtask-" + bi);
-    if (!input) return;
-    var taskName = input.value.trim();
-    if (!taskName) return;
-    fetch(WEB_APP_URL + "?action=addTask&blockName=" + encodeURIComponent(blockName) + "&blockStart=" + encodeURIComponent(blockStart) + "&blockEnd=" + encodeURIComponent(blockEnd) + "&taskName=" + encodeURIComponent(taskName) + "&taskTime=&maxClaimers=1&gender=" + GENDER)
-      .then(function(r) { return r.json(); })
-      .then(function(data) { if (data.success) { input.value = ""; loadTasks(); } });
-  }
+ function addTaskToBlock(blockName, blockStart, blockEnd, bi) {
+  var input = document.getElementById("newtask-" + bi);
+  if (!input) return;
+  var taskName = input.value.trim();
+  if (!taskName) return;
+  var btn = input.nextElementSibling;
+  var origText = btn.innerText;
+  btn.disabled = true;
+  btn.innerText = "...";
+  fetch(WEB_APP_URL + "?action=addTask&blockName=" + encodeURIComponent(blockName)
+    + "&blockStart=" + encodeURIComponent(blockStart)
+    + "&blockEnd=" + encodeURIComponent(blockEnd)
+    + "&taskName=" + encodeURIComponent(taskName)
+    + "&taskTime=&maxClaimers=1&gender=" + GENDER)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.success) {
+        input.value = "";
+        loadTasks();
+      } else {
+        alert("Could not add task: " + (data.error || "Unknown error"));
+      }
+      btn.disabled = false;
+      btn.innerText = origText;
+    })
+    .catch(function() {
+      alert("Connection error — could not add task");
+      btn.disabled = false;
+      btn.innerText = origText;
+    });
+}
 
   // ---- ADMIN ----
   function loadVolunteers() {
